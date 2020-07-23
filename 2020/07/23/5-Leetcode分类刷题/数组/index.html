@@ -9,7 +9,7 @@
 	
 	<title>
 	
-		Python简介 | 
+		两数之和(two sum) | 
 	 
 	Coding Is Creating
 	</title>
@@ -98,7 +98,7 @@
 									</a>
 									
 							<ul>
-								<li class="file active">
+								<li class="file">
 									<a href="/2020/07/16/1-Python%E5%92%8C%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/Python%E7%AE%80%E4%BB%8B/">
 										Python简介
 									</a>
@@ -223,7 +223,7 @@
 									</a>
 									
 							<ul>
-								<li class="file">
+								<li class="file active">
 									<a href="/2020/07/23/5-Leetcode%E5%88%86%E7%B1%BB%E5%88%B7%E9%A2%98/%E6%95%B0%E7%BB%84/">
 										数组
 									</a>
@@ -243,12 +243,12 @@
 	<div id="content">
 		<h1 id="article-title">
 
-	Python简介
+	数组
 </h1>
 <div class="article-meta">
 	
 	<span>Tim Huang</span>
-	<span>2020-07-16 22:43:50</span>
+	<span>2020-07-23 15:01:48</span>
     
 		<div id="article-categories">
             
@@ -257,9 +257,27 @@
 </div>
 
 <div id="article-content">
-	<h2 id="Python是什么？"><a href="#Python是什么？" class="headerlink" title="Python是什么？"></a>Python是什么？</h2><p>Python是一种高级编程语言，高级体现在其语言表达更接近人类的习惯；Python无需用户编译，即可执行。</p>
-<h2 id="Python可以做什么？"><a href="#Python可以做什么？" class="headerlink" title="Python可以做什么？"></a>Python可以做什么？</h2><p>在人工智能时代，Python被大量用来写机器学习程序；另外在爬虫，Web开发（Flask, Django）, 科学计算与数据分析也能大展拳脚。</p>
-<h2 id="Pythong版本"><a href="#Pythong版本" class="headerlink" title="Pythong版本"></a>Pythong版本</h2><p>Python 2.0 已经不再维护，不建议学习使用；<br>Python 3.0 已经稳定发展到 python 3.8。中文文档如下：<br><a href="https://docs.python.org/zh-cn/3/" target="_blank" rel="noopener">https://docs.python.org/zh-cn/3/</a></p>
+	<p>给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。</p>
+<p>你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><pre><code>给定 nums = [2, 7, 11, 15], target = 9
+
+因为 nums[0] + nums[1] = 2 + 7 = 9
+所以返回 [0, 1]</code></pre><h2 id="题解1"><a href="#题解1" class="headerlink" title="题解1"></a>题解1</h2><pre><code>class Solution:
+    def twoSum(self, nums, target):
+            for i in range(len(nums) - 1): 
+                for j in range(i+1, len(nums)):
+                    if nums[i] + nums[j] == target:
+                        return [i, j]</code></pre><p>时间复杂度：O(n2)，两层for循环。</p>
+<p>空间复杂度：O(1)，除了输入数组需要占用内存空间，不需要额外空间。</p>
+<h2 id="题解2"><a href="#题解2" class="headerlink" title="题解2"></a>题解2</h2><pre><code>class Solution:
+    def twoSum(self, nums: List[int], target: int):
+        dic=dict()
+        for key,value in enumerate(nums):
+                if target-value in dic and key!=dic[target-value]:
+                    return [key,dic[target-value]]
+                else:
+                    dic[value]=key</code></pre><p>时间复杂度：O(n)，一层for循环。</p>
+<p>空间复杂度：O(n)，新建字典需要额外空间。</p>
 
 </div>
 
@@ -267,13 +285,13 @@
     <div class="post-guide">
         <div class="item left">
             
-              <a href="/2020/07/16/2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/%E4%BB%80%E4%B9%88%E6%98%AF%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/">
-                  <i class="fa fa-angle-left" aria-hidden="true"></i>
-                  什么是数据结构和算法
-              </a>
-            
         </div>
         <div class="item right">
+            
+              <a href="/2020/07/23/4-Linux%E6%8C%87%E4%BB%A4/(1)%20ls%E5%91%BD%E4%BB%A4/">
+                (1) ls命令
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+              </a>
             
         </div>
     </div>
