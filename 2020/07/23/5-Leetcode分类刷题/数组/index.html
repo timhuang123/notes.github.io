@@ -247,6 +247,10 @@
 </h1>
 <div class="article-meta">
 	
+		<span>
+			阅读量:<span id="/2020/07/23/5-Leetcode%E5%88%86%E7%B1%BB%E5%88%B7%E9%A2%98/%E6%95%B0%E7%BB%84/" class="leancloud_visitors" data-flag-title="两数之和(two sum)"></span>
+		</span>
+	
 	<span>Tim Huang</span>
 	<span>2020-07-23 15:01:48</span>
     
@@ -298,9 +302,57 @@
 
 
 
+	<div id="vcomments"></div>
+
 
 <script>
 	
+		// 评论
+		new Valine({
+			av: AV,
+			el: '#vcomments',
+			notify: false,
+			verify: false,
+			path: window.location.pathname,
+			appId: '8jsytjjIGzdCFAwwgzvVXPVz-MdYXbMMI',
+			appKey: 'RAfk6QXrVENV0y2tkKfMTsT1',
+			placeholder: '请输入评论',
+			avatar: 'retro',
+			recordIP: false
+		})
+	
+	
+    // 显示次数
+		function showTime(Counter) {
+			var query = new AV.Query("Counter");
+			if($(".leancloud_visitors").length > 0){
+				var url = $(".leancloud_visitors").attr('id').trim();
+				// where field
+				query.equalTo("words", url);
+				// count
+				query.count().then(function (number) {
+					// There are number instances of MyClass where words equals url.
+					$(document.getElementById(url)).text(number?  number : '--');
+				}, function (error) {
+					// error is an instance of AVError.
+				});
+			}
+		}
+		// 追加pv
+		function addCount(Counter) {
+			var url = $(".leancloud_visitors").length > 0 ? $(".leancloud_visitors").attr('id').trim() : 'wujun234.github.io';
+			var Counter = AV.Object.extend("Counter");
+			var query = new Counter;
+			query.save({
+				words: url
+			}).then(function (object) {
+			})
+		}
+		$(function () {
+			var Counter = AV.Object.extend("Counter");
+			addCount(Counter);
+			showTime(Counter);
+		});
 	
 </script>
 	</div>
