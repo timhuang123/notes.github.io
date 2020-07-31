@@ -9,7 +9,7 @@
 	
 	<title>
 	
-		用Numpy写一个简易神经网络 | 
+		ADT and OOP | 
 	 
 	Coding Is Creating
 	</title>
@@ -127,7 +127,7 @@
 							</ul>
 			
 							<ul>
-								<li class="file">
+								<li class="file active">
 									<a href="/2020/08/01/2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/1-%E6%8A%BD%E8%B1%A1%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/">
 										1-抽象数据类型和面向对象编程
 									</a>
@@ -147,7 +147,7 @@
 									</a>
 									
 							<ul>
-								<li class="file active">
+								<li class="file">
 									<a href="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/Adaboost/">
 										Adaboost
 									</a>
@@ -263,16 +263,16 @@
 	<div id="content">
 		<h1 id="article-title">
 
-	Adaboost
+	1-抽象数据类型和面向对象编程
 </h1>
 <div class="article-meta">
 	
 		<span>
-			阅读量:<span id="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/Adaboost/" class="leancloud_visitors" data-flag-title="用Numpy写一个简易神经网络"></span>
+			阅读量:<span id="/2020/08/01/2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/1-%E6%8A%BD%E8%B1%A1%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/" class="leancloud_visitors" data-flag-title="ADT and OOP"></span>
 		</span>
 	
 	<span>Tim Huang</span>
-	<span>2020-07-18 17:33:14</span>
+	<span>2020-08-01 00:22:09</span>
     
 		<div id="article-categories">
             
@@ -281,70 +281,57 @@
 </div>
 
 <div id="article-content">
-	<p>造轮子不是目的，但是造轮子可以更好地理解神经网络的底层工作原理。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>#数据集
-import numpy as np
-feature_set = np.array([[0,1,0],[0,0,1],[1,0,0],[1,1,0],[1,1,1]])
-labels = np.array([[1,0,0,1,1]])
-labels = labels.reshape(5,1)
+	<h2 id="面向对象编程-Object-Oriented-Programming"><a href="#面向对象编程-Object-Oriented-Programming" class="headerlink" title="面向对象编程 - Object Oriented Programming"></a>面向对象编程 - Object Oriented Programming</h2><p>类（class）包含属性和方法。 属性一般是使用某种特定的数据类型，而方法一般是类所拥有的操作。</p>
+<p>举个通俗的例子，老虎是一个类，属性有体长，毛色，老虎这个类的方法有跳跃，吃东西：</p>
+<pre><code>class Tiger:
+    body_length=2
+    color=yellow
 
-#初始化参数
-np.random.seed(42)
-weights = np.random.rand(3,1)
-bias = np.random.rand(1)
-lr = 0.05
+    def jump():
+        pass
 
-#定义活化函数
-def sigmoid(x):
-    return 1/(1+np.exp(-x))
-#活化函数的导数 -- 用于反向传播
-def sigmoid_der(x):
-    return sigmoid(x)*(1-sigmoid(x))
+    def eat():
+        pass</code></pre><h2 id="抽象数据类型-Abstract-Data-Type"><a href="#抽象数据类型-Abstract-Data-Type" class="headerlink" title="抽象数据类型 - Abstract Data Type"></a>抽象数据类型 - Abstract Data Type</h2><p>它通常是对数据的某种抽象，定义了数据的取值范围及其结构形式，以及对数据操作的集合。</p>
+<h2 id="ADT-的一般形式"><a href="#ADT-的一般形式" class="headerlink" title="ADT 的一般形式"></a>ADT 的一般形式</h2><pre><code>ADT 抽象数据类型名
+{
+Data:
+数据元素之间逻辑关系的定义；
 
-#训练过程
-for epoch in range(20000):
-    inputs = feature_set
+Operation:
+操作1；
+操作2；
+操作n;
+}</code></pre><h2 id="自己写一个ADT"><a href="#自己写一个ADT" class="headerlink" title="自己写一个ADT"></a>自己写一个ADT</h2><pre><code>class Bag(object):
 
-    # feedforward step1
-    XW = np.dot(feature_set, weights) + bias
+    def __init__(self, maxsize=10):
+        self.maxsize = maxsize #取值范围
+        self._items = list() #结构形式，线性结构
 
-    #feedforward step2
-    z = sigmoid(XW)
+    def add(self, item): #增加元素
+        if len(self) &gt;= self.maxsize:
+            raise Exception(&apos;Full&apos;)
+        self._items.append(item)
 
+    def remove(self, item): #删除元素
+        self._items.remove(item)
 
-    # backpropagation step 1
-    error = z - labels
+    def __len__(self): #魔法方法：返回长度
+        return len(self._items)
 
-    print(error.sum())
-
-    # backpropagation step 2
-    dcost_dpred = error
-    dpred_dz = sigmoid_der(z)
-
-    z_delta = dcost_dpred * dpred_dz
-
-    inputs = feature_set.T
-    weights -= lr * np.dot(inputs, z_delta)
-
-    for num in z_delta:
-        bias -= lr * num</code></pre><p>稍后详细解释。</p>
-
+    def __iter__(self): #魔法方法：赋予Bag迭代的特性，如何没有这个方法，Bag则无法迭代
+        for item in self._items:
+            yield item</code></pre>
 </div>
 
 
     <div class="post-guide">
         <div class="item left">
             
-              <a href="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/Support%20vector%20machine/">
-                  <i class="fa fa-angle-left" aria-hidden="true"></i>
-                  Support vector machine
-              </a>
-            
         </div>
         <div class="item right">
             
-              <a href="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/XGBoost/">
-                XGBoost
+              <a href="/2020/07/23/5-Leetcode%E5%88%86%E7%B1%BB%E5%88%B7%E9%A2%98/%E6%95%B0%E7%BB%84-Array/%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C/">
+                数组-Array
                 <i class="fa fa-angle-right" aria-hidden="true"></i>
               </a>
             

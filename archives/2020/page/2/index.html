@@ -8,8 +8,6 @@
 	<!-- title -->
 	
 	<title>
-	
-		用Numpy写一个简易神经网络 | 
 	 
 	Coding Is Creating
 	</title>
@@ -147,7 +145,7 @@
 									</a>
 									
 							<ul>
-								<li class="file active">
+								<li class="file">
 									<a href="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/Adaboost/">
 										Adaboost
 									</a>
@@ -261,151 +259,36 @@
 
 	<!-- 引入正文 -->
 	<div id="content">
-		<h1 id="article-title">
-
-	Adaboost
-</h1>
-<div class="article-meta">
+		<div id="index">
 	
-		<span>
-			阅读量:<span id="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/Adaboost/" class="leancloud_visitors" data-flag-title="用Numpy写一个简易神经网络"></span>
-		</span>
+		<div class="index-li">
+			<a href="/2020/07/16/1-Python%E5%92%8C%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/Python%E7%AE%80%E4%BB%8B/">
+				<h2 class="index-title">
+					Python简介
+				</h2>
+				<div class="index-brief">
+					Python是什么？Python是一种高级编程语言，高级体现在其语言表达更接近人类的习惯；Python无需用户编译，即可执行。
+Python可以做什么？在人工智能时代，Python被大量用来写机器学习程序；另外在爬虫，Web开发（Flask, Django）, 科学计算与数据分析也能大展拳脚。
+Py
+					...
+				</div>
+			</a>
+                <div class="article-meta">
+				    <span>2020-07-16</span>
+                    
+                            
+                    
+                </div>
+		</div>	
 	
-	<span>Tim Huang</span>
-	<span>2020-07-18 17:33:14</span>
-    
-		<div id="article-categories">
-            
-		</div>
-    
+	
+	<div id="index-paginator">
+		
+			<a class="extend prev" rel="prev" href="/archives/2020/">&lt;</a><a class="page-number" href="/archives/2020/">1</a><span class="page-number current">2</span>
+		
+	</div>
 </div>
 
-<div id="article-content">
-	<p>造轮子不是目的，但是造轮子可以更好地理解神经网络的底层工作原理。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>#数据集
-import numpy as np
-feature_set = np.array([[0,1,0],[0,0,1],[1,0,0],[1,1,0],[1,1,1]])
-labels = np.array([[1,0,0,1,1]])
-labels = labels.reshape(5,1)
-
-#初始化参数
-np.random.seed(42)
-weights = np.random.rand(3,1)
-bias = np.random.rand(1)
-lr = 0.05
-
-#定义活化函数
-def sigmoid(x):
-    return 1/(1+np.exp(-x))
-#活化函数的导数 -- 用于反向传播
-def sigmoid_der(x):
-    return sigmoid(x)*(1-sigmoid(x))
-
-#训练过程
-for epoch in range(20000):
-    inputs = feature_set
-
-    # feedforward step1
-    XW = np.dot(feature_set, weights) + bias
-
-    #feedforward step2
-    z = sigmoid(XW)
-
-
-    # backpropagation step 1
-    error = z - labels
-
-    print(error.sum())
-
-    # backpropagation step 2
-    dcost_dpred = error
-    dpred_dz = sigmoid_der(z)
-
-    z_delta = dcost_dpred * dpred_dz
-
-    inputs = feature_set.T
-    weights -= lr * np.dot(inputs, z_delta)
-
-    for num in z_delta:
-        bias -= lr * num</code></pre><p>稍后详细解释。</p>
-
-</div>
-
-
-    <div class="post-guide">
-        <div class="item left">
-            
-              <a href="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/Support%20vector%20machine/">
-                  <i class="fa fa-angle-left" aria-hidden="true"></i>
-                  Support vector machine
-              </a>
-            
-        </div>
-        <div class="item right">
-            
-              <a href="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/XGBoost/">
-                XGBoost
-                <i class="fa fa-angle-right" aria-hidden="true"></i>
-              </a>
-            
-        </div>
-    </div>
-
-
-
-	<div id="vcomments"></div>
-
-
-<script>
-	
-		// 评论
-		new Valine({
-			av: AV,
-			el: '#vcomments',
-			notify: false,
-			verify: false,
-			path: window.location.pathname,
-			appId: '8jsytjjIGzdCFAwwgzvVXPVz-MdYXbMMI',
-			appKey: 'RAfk6QXrVENV0y2tkKfMTsT1',
-			placeholder: '请输入评论',
-			avatar: 'retro',
-			recordIP: false
-		})
-	
-	
-    // 显示次数
-		function showTime(Counter) {
-			var query = new AV.Query("Counter");
-			if($(".leancloud_visitors").length > 0){
-				var url = $(".leancloud_visitors").attr('id').trim();
-				// where field
-				query.equalTo("words", url);
-				// count
-				query.count().then(function (number) {
-					// There are number instances of MyClass where words equals url.
-					$(document.getElementById(url)).text(number?  number : '--');
-				}, function (error) {
-					// error is an instance of AVError.
-				});
-			}
-		}
-		// 追加pv
-		function addCount(Counter) {
-			var url = $(".leancloud_visitors").length > 0 ? $(".leancloud_visitors").attr('id').trim() : 'wujun234.github.io';
-			var Counter = AV.Object.extend("Counter");
-			var query = new Counter;
-			query.save({
-				words: url
-			}).then(function (object) {
-			})
-		}
-		$(function () {
-			var Counter = AV.Object.extend("Counter");
-			addCount(Counter);
-			showTime(Counter);
-		});
-	
-</script>
 	</div>
 	<div id="footer">
 	<p>
