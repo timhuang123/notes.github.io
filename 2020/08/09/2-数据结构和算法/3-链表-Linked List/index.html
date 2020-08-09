@@ -9,7 +9,7 @@
 	
 	<title>
 	
-		用Numpy写一个简易神经网络 | 
+		ADT and OOP | 
 	 
 	Coding Is Creating
 	</title>
@@ -145,7 +145,7 @@
 							</ul>
 			
 							<ul>
-								<li class="file">
+								<li class="file active">
 									<a href="/2020/08/09/2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/3-%E9%93%BE%E8%A1%A8-Linked%20List/">
 										3-链表-Linked List
 									</a>
@@ -228,7 +228,7 @@
 							</ul>
 			
 							<ul>
-								<li class="file active">
+								<li class="file">
 									<a href="/2020/07/16/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/%E7%94%A8Numpy%E5%86%99%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">
 										用Numpy写神经网络
 									</a>
@@ -382,16 +382,16 @@
 	<div id="content">
 		<h1 id="article-title">
 
-	用Numpy写神经网络
+	3-链表-Linked List
 </h1>
 <div class="article-meta">
 	
 		<span>
-			阅读量:<span id="/2020/07/16/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/%E7%94%A8Numpy%E5%86%99%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="leancloud_visitors" data-flag-title="用Numpy写一个简易神经网络"></span>
+			阅读量:<span id="/2020/08/09/2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/3-%E9%93%BE%E8%A1%A8-Linked%20List/" class="leancloud_visitors" data-flag-title="ADT and OOP"></span>
 		</span>
 	
 	<span>Tim Huang</span>
-	<span>2020-07-16 22:43:50</span>
+	<span>2020-08-09 23:49:36</span>
     
 		<div id="article-categories">
             
@@ -400,70 +400,144 @@
 </div>
 
 <div id="article-content">
-	<p>造轮子不是目的，但是造轮子可以更好地理解神经网络的底层工作原理。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>#数据集
-import numpy as np
-feature_set = np.array([[0,1,0],[0,0,1],[1,0,0],[1,1,0],[1,1,1]])
-labels = np.array([[1,0,0,1,1]])
-labels = labels.reshape(5,1)
+	<h2 id="节点类"><a href="#节点类" class="headerlink" title="节点类"></a>节点类</h2><pre><code>class Node(object):
+    def __init__(self, value=None, next=None):   # 这里我们 root 节点默认都是 None，所以都给了默认值
+        self.value = value
+        self.next = next</code></pre><h2 id="链表类"><a href="#链表类" class="headerlink" title="链表类"></a>链表类</h2><pre><code>class LinkedList(object):
 
-#初始化参数
-np.random.seed(42)
-weights = np.random.rand(3,1)
-bias = np.random.rand(1)
-lr = 0.05
+    def __init__(self, maxsize=None):
+        &quot;&quot;&quot;
+        :param maxsize: int or None, 如果是 None，无限扩充
+        &quot;&quot;&quot;
+        self.maxsize = maxsize
+        self.root = Node()     # 默认 root 节点指向 None
+        self.tailnode = None
+        self.length = 0
 
-#定义活化函数
-def sigmoid(x):
-    return 1/(1+np.exp(-x))
-#活化函数的导数 -- 用于反向传播
-def sigmoid_der(x):
-    return sigmoid(x)*(1-sigmoid(x))
+    def __len__(self):
+        return self.length
 
-#训练过程
-for epoch in range(20000):
-    inputs = feature_set
+    def append(self, value):    # O(1)
+        if self.maxsize is not None and len(self) &gt;= self.maxsize:
+            raise Exception(&apos;LinkedList is Full&apos;)
+        node = Node(value)    # 构造节点
+        tailnode = self.tailnode
+        if tailnode is None:    # 还没有 append 过，length = 0， 追加到 root 后
+            self.root.next = node
+        else:     # 否则追加到最后一个节点的后边，并更新最后一个节点是 append 的节点
+            tailnode.next = node
+        self.tailnode = node
+        self.length += 1
 
-    # feedforward step1
-    XW = np.dot(feature_set, weights) + bias
+    def appendleft(self, value):
+        if self.maxsize is not None and len(self) &gt;= self.maxsize:
+            raise Exception(&apos;LinkedList is Full&apos;)
+        node = Node(value)
+        if self.tailnode is None:  # 如果原链表为空，插入第一个元素需要设置 tailnode
+            self.tailnode = node
 
-    #feedforward step2
-    z = sigmoid(XW)
+        headnode = self.root.next
+        self.root.next = node
+        node.next = headnode
+        self.length += 1
 
+    def __iter__(self):
+        for node in self.iter_node():
+            yield node.value
 
-    # backpropagation step 1
-    error = z - labels
+    def iter_node(self):
+        &quot;&quot;&quot;遍历 从 head 节点到 tail 节点&quot;&quot;&quot;
+        curnode = self.root.next
+        while curnode is not self.tailnode:    # 从第一个节点开始遍历
+            yield curnode
+            curnode = curnode.next    # 移动到下一个节点
+        if curnode is not None:
+            yield curnode
 
-    print(error.sum())
+    def remove(self, value):    # O(n)
+        &quot;&quot;&quot; 删除包含值的一个节点，将其前一个节点的 next 指向被查询节点的下一个即可
+        :param value:
+        &quot;&quot;&quot;
+        prevnode = self.root    #
+        for curnode in self.iter_node():
+            if curnode.value == value:
+                prevnode.next = curnode.next
+                if curnode is self.tailnode:  # NOTE: 注意更新 tailnode
+                    if prevnode is self.root:
+                        self.tailnode = None
+                    else:
+                        self.tailnode = prevnode
+                del curnode
+                self.length -= 1
+                return 1  # 表明删除成功
+            else:
+                prevnode = curnode
+        return -1  # 表明删除失败
 
-    # backpropagation step 2
-    dcost_dpred = error
-    dpred_dz = sigmoid_der(z)
+    def find(self, value):    # O(n)
+        &quot;&quot;&quot; 查找一个节点，返回序号，从 0 开始
+        :param value:
+        &quot;&quot;&quot;
+        index = 0
+        for node in self.iter_node():   # 我们定义了 __iter__，这里就可以用 for 遍历它了
+            if node.value == value:
+                return index
+            index += 1
+        return -1    # 没找到
 
-    z_delta = dcost_dpred * dpred_dz
+    def popleft(self):    # O(1)
+        &quot;&quot;&quot; 删除第一个链表节点
+        &quot;&quot;&quot;
+        if self.root.next is None:
+            raise Exception(&apos;pop from empty LinkedList&apos;)
+        headnode = self.root.next
+        self.root.next = headnode.next
+        self.length -= 1
+        value = headnode.value
 
-    inputs = feature_set.T
-    weights -= lr * np.dot(inputs, z_delta)
+        if self.tailnode is headnode:   # 勘误：增加单节点删除 tailnode 处理
+            self.tailnode = None
+        del headnode
+        return value
 
-    for num in z_delta:
-        bias -= lr * num</code></pre><p>稍后详细解释。</p>
+    def clear(self):
+        for node in self.iter_node():
+            del node
+        self.root.next = None
+        self.length = 0
+        self.tailnode = None
 
+    def reverse(self):
+        &quot;&quot;&quot;反转链表&quot;&quot;&quot;
+        curnode = self.root.next
+        self.tailnode = curnode  # 记得更新 tailnode，多了这个属性处理起来经常忘记
+        prevnode = None
+
+        while curnode:
+            nextnode = curnode.next
+            curnode.next = prevnode
+
+            if nextnode is None:
+                self.root.next = curnode
+
+            prevnode = curnode
+            curnode = nextnode</code></pre>
 </div>
 
 
     <div class="post-guide">
         <div class="item left">
             
-              <a href="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92-%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E5%92%8C%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E4%BC%98%E5%8C%96/">
+              <a href="/2020/08/09/2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/2-%E6%95%B0%E7%BB%84-Array/">
                   <i class="fa fa-angle-left" aria-hidden="true"></i>
-                  逻辑回归-梯度下降和最小二乘法优化
+                  2-数组-Array
               </a>
             
         </div>
         <div class="item right">
             
-              <a href="/2020/07/16/2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/0-%E4%BB%80%E4%B9%88%E6%98%AF%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/">
-                0-什么是数据结构和算法
+              <a href="/2020/08/09/7-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E5%9C%A8%E7%BA%BF%E5%AD%A6%E4%B9%A0Sarsa/">
+                2-在线学习Sarsa
                 <i class="fa fa-angle-right" aria-hidden="true"></i>
               </a>
             
