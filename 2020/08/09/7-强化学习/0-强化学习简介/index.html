@@ -9,7 +9,7 @@
 	
 	<title>
 	
-		随便写写 | 
+		强化学习简介 | 
 	 
 	Coding Is Creating
 	</title>
@@ -299,7 +299,7 @@
 									</a>
 									
 							<ul>
-								<li class="file">
+								<li class="file active">
 									<a href="/2020/08/09/7-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/0-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%AE%80%E4%BB%8B/">
 										0-强化学习简介
 									</a>
@@ -337,29 +337,59 @@
 	<div id="content">
 		<h1 id="article-title">
 
-	随便写写
+	0-强化学习简介
 </h1>
 <div class="article-meta">
 	
 		<span>
-			阅读量:<span id="/about/index.html" class="leancloud_visitors" data-flag-title="随便写写"></span>
+			阅读量:<span id="/2020/08/09/7-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/0-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%AE%80%E4%BB%8B/" class="leancloud_visitors" data-flag-title="强化学习简介"></span>
 		</span>
 	
 	<span>Tim Huang</span>
-	<span>2020-07-17 21:18:16</span>
+	<span>2020-08-09 19:52:04</span>
+    
+		<div id="article-categories">
+            
+		</div>
     
 </div>
 
 <div id="article-content">
-	<p>计算机知识体系庞大，知识繁多，因此养成记录的习惯非常重要。这个网站主要用来记录学习过程，分享知识，欢迎交流讨论！</p>
-<h2 id="导论"><a href="#导论" class="headerlink" title="导论"></a>导论</h2><p>现阶段计划写写python和数据科学（包括可视化），基本的数据结构和算法，刷leetcode的经历，都会有代码示例。</p>
-<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><pre><code>def fib(n):
-    if n&lt;=1:
-        return n
-    if n&gt;1:
-        return fib(n-1)+fib(n-1)</code></pre>
+	<p>看到阿尔法狗系列在围棋界惊人的战绩之后，想不想知道战胜人类顶尖智力的“大脑”是什么，它是如何修炼成功的？如果对这些感兴趣，就必须了解下强化学习（Reinforcement Learning），以及背后的算法思想。</p>
+<ul>
+<li>什么是强化学习</li>
+</ul>
+<p>强化学习是机器学习中的一个领域，强调如何基于环境而行动，以取得最大化的预期利益。其灵感来源于心理学中的行为主义理论，即有机体如何在环境给予的奖励或惩罚的刺激下，逐步形成对刺激的预期，产生能获得最大利益的习惯性行为。</p>
+<ul>
+<li>强化学习分类</li>
+</ul>
+<p>在强化学习中，有两大类方法，一种基于值（Value-based），一种基于策略（Policy-based）。二者结合可得到Actor-Critic的方法。所以现在主流的策略梯度（Policy Gradient）方法都会使用Actor-Critic的框架，Actor对策略建模，Critic则对值函数建模。</p>
+<ul>
+<li>强化学习系列概览</li>
+</ul>
+<p>这里的强化学习系列主要介绍基于值：Q learning, Sarsa, Deep Q Network; 和基于策略：Policy Gradient的方法。然后会讲讲强化学习的应用，基于强化学习的推荐系统，阿尔法狗的缩小版 —— 蒙特卡罗树搜索用于五子棋对弈。</p>
+
 </div>
 
+
+    <div class="post-guide">
+        <div class="item left">
+            
+              <a href="/2020/08/09/7-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1-%E7%A6%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0Q%20learning/">
+                  <i class="fa fa-angle-left" aria-hidden="true"></i>
+                  1-离线学习Q learning
+              </a>
+            
+        </div>
+        <div class="item right">
+            
+              <a href="/2020/08/06/4-Linux%E6%8C%87%E4%BB%A4/3-%20cd%E5%91%BD%E4%BB%A4/">
+                3- cd命令
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+              </a>
+            
+        </div>
+    </div>
 
 
 

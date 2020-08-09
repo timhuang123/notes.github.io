@@ -9,7 +9,7 @@
 	
 	<title>
 	
-		随便写写 | 
+		强化学习简介 | 
 	 
 	Coding Is Creating
 	</title>
@@ -308,7 +308,7 @@
 							</ul>
 			
 							<ul>
-								<li class="file">
+								<li class="file active">
 									<a href="/2020/08/09/7-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1-%E7%A6%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0Q%20learning/">
 										1-离线学习Q learning
 									</a>
@@ -337,29 +337,139 @@
 	<div id="content">
 		<h1 id="article-title">
 
-	随便写写
+	1-离线学习Q learning
 </h1>
 <div class="article-meta">
 	
 		<span>
-			阅读量:<span id="/about/index.html" class="leancloud_visitors" data-flag-title="随便写写"></span>
+			阅读量:<span id="/2020/08/09/7-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1-%E7%A6%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0Q%20learning/" class="leancloud_visitors" data-flag-title="强化学习简介"></span>
 		</span>
 	
 	<span>Tim Huang</span>
-	<span>2020-07-17 21:18:16</span>
+	<span>2020-08-09 20:06:12</span>
+    
+		<div id="article-categories">
+            
+		</div>
     
 </div>
 
 <div id="article-content">
-	<p>计算机知识体系庞大，知识繁多，因此养成记录的习惯非常重要。这个网站主要用来记录学习过程，分享知识，欢迎交流讨论！</p>
-<h2 id="导论"><a href="#导论" class="headerlink" title="导论"></a>导论</h2><p>现阶段计划写写python和数据科学（包括可视化），基本的数据结构和算法，刷leetcode的经历，都会有代码示例。</p>
-<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><pre><code>def fib(n):
-    if n&lt;=1:
-        return n
-    if n&gt;1:
-        return fib(n-1)+fib(n-1)</code></pre>
+	<p>下面是一个一维探索宝藏的游戏，o—-T; 起始状态时，代表人(agent)的符号“o”处在第一个位子，需要向右走五步到达宝藏所在地，到达宝藏所在地之后，才会获得奖励（reward），这个例子虽然简单，但是强化学习需要的环境(environment)和agent，state, action, reward都有了。而且因为模型简单，很适合用来初步理解强化学习的思维方式。</p>
+<pre><code>import numpy as np
+import pandas as pd
+import time
+
+np.random.seed(2)  # reproducible
+
+
+N_STATES = 6   # the length of the 1 dimensional world
+ACTIONS = [&apos;left&apos;, &apos;right&apos;]     # available actions
+EPSILON = 0.9   # greedy police
+ALPHA = 0.1     # learning rate
+GAMMA = 0.9    # discount factor
+MAX_EPISODES = 13   # maximum episodes
+FRESH_TIME = 0.3    # fresh time for one move
+
+
+def build_q_table(n_states, actions):
+    table = pd.DataFrame(
+        np.zeros((n_states, len(actions))),     # q_table initial values
+        columns=actions,    # actions&apos;s name
+    )
+    # print(table)    # show table
+    return table
+
+
+def choose_action(state, q_table):
+    # This is how to choose an action
+    state_actions = q_table.iloc[state, :]
+    if (np.random.uniform() &gt; EPSILON) or ((state_actions == 0).all()):  # act non-greedy or state-action have no value
+        action_name = np.random.choice(ACTIONS)
+    else:   # act greedy
+        action_name = state_actions.idxmax()    # replace argmax to idxmax as argmax means a different function in newer version of pandas
+    return action_name
+
+
+def get_env_feedback(S, A):
+    # This is how agent will interact with the environment
+    if A == &apos;right&apos;:    # move right
+        if S == N_STATES - 2:   # terminate
+            S_ = &apos;terminal&apos;
+            R = 1
+        else:
+            S_ = S + 1
+            R = 0
+    else:   # move left
+        R = 0
+        if S == 0:
+            S_ = S  # reach the wall
+        else:
+            S_ = S - 1
+    return S_, R
+
+
+def update_env(S, episode, step_counter):
+    # This is how environment be updated
+    env_list = [&apos;-&apos;]*(N_STATES-1) + [&apos;T&apos;]   # &apos;---------T&apos; our environment
+    if S == &apos;terminal&apos;:
+        interaction = &apos;Episode %s: total_steps = %s&apos; % (episode+1, step_counter)
+        print(&apos;\r{}&apos;.format(interaction), end=&apos;&apos;)
+        time.sleep(2)
+        print(&apos;\r                                &apos;, end=&apos;&apos;)
+    else:
+        env_list[S] = &apos;o&apos;
+        interaction = &apos;&apos;.join(env_list)
+        print(&apos;\r{}&apos;.format(interaction), end=&apos;&apos;)
+        time.sleep(FRESH_TIME)
+
+
+def rl():
+    # main part of RL loop
+    q_table = build_q_table(N_STATES, ACTIONS)
+    for episode in range(MAX_EPISODES):
+        step_counter = 0
+        S = 0
+        is_terminated = False
+        update_env(S, episode, step_counter)
+        while not is_terminated:
+
+            A = choose_action(S, q_table)
+            S_, R = get_env_feedback(S, A)  # take action &amp; get next state and reward
+            q_predict = q_table.loc[S, A]
+            if S_ != &apos;terminal&apos;:
+                q_target = R + GAMMA * q_table.iloc[S_, :].max()   # next state is not terminal
+            else:
+                q_target = R     # next state is terminal
+                is_terminated = True    # terminate this episode
+
+            q_table.loc[S, A] += ALPHA * (q_target - q_predict)  # update
+            S = S_  # move to next state
+
+            update_env(S, episode, step_counter+1)
+            step_counter += 1
+    return q_table</code></pre>
 </div>
 
+
+    <div class="post-guide">
+        <div class="item left">
+            
+              <a href="/2020/08/09/7-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E5%9C%A8%E7%BA%BF%E5%AD%A6%E4%B9%A0Sarsa/">
+                  <i class="fa fa-angle-left" aria-hidden="true"></i>
+                  2-在线学习Sarsa
+              </a>
+            
+        </div>
+        <div class="item right">
+            
+              <a href="/2020/08/09/7-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/0-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%AE%80%E4%BB%8B/">
+                0-强化学习简介
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+              </a>
+            
+        </div>
+    </div>
 
 
 
