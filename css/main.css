@@ -270,6 +270,8 @@ a {
 #article-content {
 	padding: 10px 0;
 	border-bottom: 2px solid #ddd;
+	letter-spacing:2px;
+	line-height:28px;
 }
 #article-content ol,
 #article-content ul {
