@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	
+	<!-- title -->
+	
+	<title>
+	
+		4-Linux指令/Shell脚本编程/Shell脚本编程 | 
+	 
+	Coding Is Creating
+	</title>
+	
+	<!-- keywords,description -->
+	 
+
+	<!-- favicon -->
+	
+	<link rel="shortcut icon" href="/favicon.ico">
+	
+  
+
+	
+<link rel="stylesheet" href="/css/main.css">
+
+	
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/styles/darcula.min.css">
+
+
+	
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js"></script>
+
+	
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+	
+<script src="https://cdn.jsdelivr.net/npm/jquery-pjax@2.0.1/jquery.pjax.min.js"></script>
+
+	
+<script src="/js/main.js"></script>
+
+	
+		
+<script src="https://cdn.jsdelivr.net/npm/leancloud-storage/dist/av-min.js"></script>
+
+		
+<script src="https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js"></script>
+
+	
+	
+		<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+	<header id="header">
+    <a id="title" href="/" class="logo">Coding Is Creating</a>
+
+	<ul id="menu">
+		<li class="menu-item">
+			<a href="/about" class="menu-item-link">ABOUT</a>
+		</li>
+		
+		<li class="menu-item">
+			<a href="http://spamsms.huangtan.me" class="menu-item-link" target="_blank">
+				WebApp
+			</a>
+		</li>
+		<li class="menu-item">
+			<a href="https://github.com/timhuang123" class="menu-item-link" target="_blank">
+				<i class="fa fa-github fa-2x"></i>
+			</a>
+		</li>
+	</ul>
+</header>
+
+	
+<div id="sidebar">
+	<button id="sidebar-toggle" class="toggle" ><i class="fa fa-arrow-right " aria-hidden="true"></i></button>
+	
+	<div id="site-toc">
+		<input id="search-input" class="search-input" type="text" placeholder="search...">
+		<div id="tree">
+			
+
+			
+							<ul>
+								<li class="directory">
+									<a href="#" class="directory">
+										<i class="fa fa-plus-square-o"></i>
+										1-Python和数据科学
+									</a>
+									
+							<ul>
+								<li class="file">
+									<a href="/2020/07/16/1-Python%E5%92%8C%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/Python%E7%AE%80%E4%BB%8B/">
+										Python简介
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/08/10/1-Python%E5%92%8C%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/">
+										面向对象编程和函数式编程
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+								</li>
+								
+							</ul>
+			
+							<ul>
+								<li class="directory">
+									<a href="#" class="directory">
+										<i class="fa fa-plus-square-o"></i>
+										2-数据结构和算法
+									</a>
+									
+							<ul>
+								<li class="file">
+									<a href="/2020/07/16/2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/0-%E4%BB%80%E4%B9%88%E6%98%AF%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/">
+										0-什么是数据结构和算法
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/08/01/2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/1-%E6%8A%BD%E8%B1%A1%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/">
+										1-抽象数据类型和面向对象编程
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/08/09/2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/2-%E6%95%B0%E7%BB%84-Array/">
+										2-数组-Array
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/08/09/2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/3-%E9%93%BE%E8%A1%A8-Linked%20List/">
+										3-链表-Linked List
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/08/09/2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/4-%E9%98%9F%E5%88%97-Queue/">
+										4-队列-Queue
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/08/09/2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/5-%E6%A0%88-Stack/">
+										5-栈-Stack
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/08/09/2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/6-%E5%93%88%E5%B8%8C%E8%A1%A8-HashTable/">
+										6-哈希表-HashTable
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+								</li>
+								
+							</ul>
+			
+							<ul>
+								<li class="directory">
+									<a href="#" class="directory">
+										<i class="fa fa-plus-square-o"></i>
+										3-手撕常用机器学习代码
+									</a>
+									
+							<ul>
+								<li class="file">
+									<a href="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/Adaboost/">
+										Adaboost
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/Support%20vector%20machine/">
+										Support vector machine
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/XGBoost/">
+										XGBoost
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/%E5%86%B3%E7%AD%96%E6%A0%91-Decision%20Trees/">
+										决策树-Decision Trees
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/07/16/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/%E7%94%A8Numpy%E5%86%99%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">
+										用Numpy写神经网络
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92-%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E5%92%8C%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E4%BC%98%E5%8C%96/">
+										逻辑回归-梯度下降和最小二乘法优化
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+								</li>
+								
+							</ul>
+			
+							<ul>
+								<li class="directory">
+									<a href="#" class="directory">
+										<i class="fa fa-plus-square-o"></i>
+										4-Linux指令
+									</a>
+									
+							<ul>
+								<li class="file">
+									<a href="/2020/08/01/4-Linux%E6%8C%87%E4%BB%A4/0-Unix%E7%B3%BB%E7%BB%9F%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2%E5%8F%8A%E4%B8%8ELinux%E7%9A%84%E5%85%B3%E7%B3%BB/">
+										0-Unix系统发展历史及与Linux的关系
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/08/02/4-Linux%E6%8C%87%E4%BB%A4/1-Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9B%AE%E5%BD%95%E5%AF%BC%E8%AF%BB/">
+										1-Linux文件系统目录导读
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/07/23/4-Linux%E6%8C%87%E4%BB%A4/2-%20ls%E5%91%BD%E4%BB%A4/">
+										2- ls命令
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/08/06/4-Linux%E6%8C%87%E4%BB%A4/3-%20cd%E5%91%BD%E4%BB%A4/">
+										3- cd命令
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="directory">
+									<a href="#" class="directory">
+										<i class="fa fa-plus-square-o"></i>
+										Shell脚本编程
+									</a>
+									
+							<ul>
+								<li class="file active">
+									<a href="/2020/08/28/4-Linux%E6%8C%87%E4%BB%A4/Shell%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B/Shell%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B/">
+										Shell脚本编程
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+								</li>
+								
+							</ul>
+			
+								</li>
+								
+							</ul>
+			
+							<ul>
+								<li class="directory">
+									<a href="#" class="directory">
+										<i class="fa fa-plus-square-o"></i>
+										5-Leetcode分类刷题
+									</a>
+									
+							<ul>
+								<li class="directory">
+									<a href="#" class="directory">
+										<i class="fa fa-plus-square-o"></i>
+										1-数组-Array
+									</a>
+									
+							<ul>
+								<li class="file">
+									<a href="/2020/07/23/5-Leetcode%E5%88%86%E7%B1%BB%E5%88%B7%E9%A2%98/1-%E6%95%B0%E7%BB%84-Array/%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C/">
+										两数之和
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+								</li>
+								
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/08/02/5-Leetcode%E5%88%86%E7%B1%BB%E5%88%B7%E9%A2%98/%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95%E9%A2%98%E5%BD%92%E7%B1%BB%E4%B8%B2%E8%AE%B2%EF%BC%9A%E9%80%92%E5%BD%92-%E8%BF%AD%E4%BB%A3-%E5%88%86%E6%B2%BB-%E5%9B%9E%E6%BA%AF-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/">
+										常见算法题归类串讲：递归-迭代-分治-回溯-动态规划-贪心算法
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+								</li>
+								
+							</ul>
+			
+							<ul>
+								<li class="directory">
+									<a href="#" class="directory">
+										<i class="fa fa-plus-square-o"></i>
+										7-强化学习
+									</a>
+									
+							<ul>
+								<li class="file">
+									<a href="/2020/08/09/7-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/0-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%AE%80%E4%BB%8B/">
+										0-强化学习简介
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/08/09/7-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1-%E7%A6%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0Q%20learning/">
+										1-离线学习Q learning
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/08/09/7-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E5%9C%A8%E7%BA%BF%E5%AD%A6%E4%B9%A0Sarsa/">
+										2-在线学习Sarsa
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+								</li>
+								
+							</ul>
+			
+							<ul>
+								<li class="directory">
+									<a href="#" class="directory">
+										<i class="fa fa-plus-square-o"></i>
+										8-自然语言处理-
+									</a>
+									
+							<ul>
+								<li class="file">
+									<a href="/2020/08/14/8-%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86-/1-Word2vec%E5%AE%9E%E7%8E%B0/">
+										1-Word2vec实现
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+								</li>
+								
+							</ul>
+			
+		</div>
+	</div>
+</div>
+
+	<!-- 引入正文 -->
+	<div id="content">
+		<h1 id="article-title">
+
+	Shell脚本编程
+</h1>
+<div class="article-meta">
+	
+		<span>
+			阅读量:<span id="/2020/08/28/4-Linux%E6%8C%87%E4%BB%A4/Shell%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B/Shell%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B/" class="leancloud_visitors" data-flag-title="4-Linux指令/Shell脚本编程/Shell脚本编程"></span>
+		</span>
+	
+	<span>Tim Huang</span>
+	<span>2020-08-28 19:02:09</span>
+    
+		<div id="article-categories">
+            
+		</div>
+    
+</div>
+
+<div id="article-content">
+	<h1 id="Shell脚本编程30分钟入门"><a href="#Shell脚本编程30分钟入门" class="headerlink" title="Shell脚本编程30分钟入门"></a>Shell脚本编程30分钟入门</h1><h2 id="什么是Shell脚本"><a href="#什么是Shell脚本" class="headerlink" title="什么是Shell脚本"></a>什么是Shell脚本</h2><h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>看个例子吧：</p>
+<pre><code>#!/bin/sh
+cd ~
+mkdir shell_tut
+cd shell_tut
+
+for ((i=0; i&lt;10; i++)); do
+    touch test_$i.txt
+done</code></pre><h3 id="示例解释"><a href="#示例解释" class="headerlink" title="示例解释"></a>示例解释</h3><ul>
+<li>第1行：指定脚本解释器，这里是用/bin/sh做解释器的</li>
+<li>第2行：切换到当前用户的home目录</li>
+<li>第3行：创建一个目录shell_tut</li>
+<li>第4行：切换到shell_tut目录</li>
+<li>第5行：循环条件，一共循环10次</li>
+<li>第6行：创建一个test_0…9.txt文件</li>
+<li>第7行：循环体结束</li>
+</ul>
+<p>mkdir, touch都是系统自带的程序，一般在/bin或者/usr/bin目录下。for, do, done是sh脚本语言的关键字。</p>
+<h3 id="shell和shell脚本的概念"><a href="#shell和shell脚本的概念" class="headerlink" title="shell和shell脚本的概念"></a>shell和shell脚本的概念</h3><p>shell是指一种应用程序，这个应用程序提供了一个界面，用户通过这个界面访问操作系统内核的服务。Ken Thompson的sh是第一种Unix Shell，Windows Explorer是一个典型的图形界面Shell。</p>
+<p>shell脚本（shell script），是一种为shell编写的脚本程序。业界所说的shell通常都是指shell脚本，但读者朋友要知道，shell和shell script是两个不同的概念。由于习惯的原因，简洁起见，本文出现的“shell编程”都是指shell脚本编程，不是指开发shell自身（如Windows Explorer扩展开发）。</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>shell编程跟java、php编程一样，只要有一个能编写代码的文本编辑器和一个能解释执行的脚本解释器就可以了。</p>
+<h3 id="OS"><a href="#OS" class="headerlink" title="OS"></a>OS</h3><p>当前主流的操作系统都支持shell编程，本文档所述的shell编程是指Linux下的shell，讲的基本都是POSIX标准下的功能，所以，也适用于Unix及BSD（如Mac OS）。</p>
+<h4 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h4><p>Linux默认安装就带了shell解释器。</p>
+<h4 id="Mac-OS"><a href="#Mac-OS" class="headerlink" title="Mac OS"></a>Mac OS</h4><p>Mac OS不仅带了sh、bash这两个最基础的解释器，还内置了ksh、csh、zsh等不常用的解释器。</p>
+<h4 id="Windows上的模拟器"><a href="#Windows上的模拟器" class="headerlink" title="Windows上的模拟器"></a>Windows上的模拟器</h4><p>windows出厂时没有内置shell解释器，需要自行安装，为了同时能用grep, awk, curl等工具，最好装一个cygwin或者mingw来模拟linux环境。</p>
+<ul>
+<li><a href="http://www.cygwin.com" target="_blank" rel="noopener">cygwin</a></li>
+<li><a href="http://www.mingw.org" target="_blank" rel="noopener">mingw</a></li>
+</ul>
+<h3 id="脚本解释器"><a href="#脚本解释器" class="headerlink" title="脚本解释器"></a>脚本解释器</h3><h4 id="sh"><a href="#sh" class="headerlink" title="sh"></a>sh</h4><p>即Bourne shell，POSIX（Portable Operating System Interface）标准的shell解释器，它的二进制文件路径通常是/bin/sh，由Bell Labs开发。</p>
+<p>本文讲的是sh，如果你使用其它语言用作shell编程，请自行参考相应语言的文档。</p>
+<h4 id="bash"><a href="#bash" class="headerlink" title="bash"></a>bash</h4><p>Bash是Bourne shell的替代品，属GNU Project，二进制文件路径通常是/bin/bash。业界通常混用bash、sh、和shell，比如你会经常在招聘运维工程师的文案中见到：熟悉Linux Bash编程，精通Shell编程。</p>
+<p>在CentOS里，/bin/sh是一个指向/bin/bash的符号链接:</p>
+<pre><code>[root@centosraw ~]# ls -l /bin/*sh
+-rwxr-xr-x. 1 root root 903272 Feb 22 05:09 /bin/bash
+-rwxr-xr-x. 1 root root 106216 Oct 17  2012 /bin/dash
+lrwxrwxrwx. 1 root root      4 Mar 22 10:22 /bin/sh -&gt; bash</code></pre><p>但在Mac OS上不是，/bin/sh和/bin/bash是两个不同的文件，尽管它们的大小只相差100字节左右:</p>
+<pre><code>iMac:~ wuxiao$ ls -l /bin/*sh
+-r-xr-xr-x  1 root  wheel  1371648  6 Nov 16:52 /bin/bash
+-rwxr-xr-x  2 root  wheel   772992  6 Nov 16:52 /bin/csh
+-r-xr-xr-x  1 root  wheel  2180736  6 Nov 16:52 /bin/ksh
+-r-xr-xr-x  1 root  wheel  1371712  6 Nov 16:52 /bin/sh
+-rwxr-xr-x  2 root  wheel   772992  6 Nov 16:52 /bin/tcsh
+-rwxr-xr-x  1 root  wheel  1103984  6 Nov 16:52 /bin/zsh</code></pre><h4 id="高级编程语言"><a href="#高级编程语言" class="headerlink" title="高级编程语言"></a>高级编程语言</h4><p>理论上讲，只要一门语言提供了解释器（而不仅是编译器），这门语言就可以胜任脚本编程，常见的解释型语言都是可以用作脚本编程的，如：Perl、Tcl、Python、PHP、Ruby。Perl是最老牌的脚本编程语言了，Python这些年也成了一些linux发行版的预置解释器。</p>
+<p>编译型语言，只要有解释器，也可以用作脚本编程，如C shell是内置的（/bin/csh），Java有第三方解释器Jshell，Ada有收费的解释器AdaScript。</p>
+<p>如下是一个PHP Shell Script示例（假设文件名叫test.php）：</p>
+<pre><code>#!/usr/bin/php
+&lt;?php
+for ($i=0; $i &lt; 10; $i++)
+        echo $i . &quot;\n&quot;;</code></pre><p>执行：</p>
+<pre><code>/usr/bin/php test.php</code></pre><p>或者：</p>
+<pre><code>chmod +x test.php
+./test.php</code></pre><h2 id="如何选择shell编程语言"><a href="#如何选择shell编程语言" class="headerlink" title="如何选择shell编程语言"></a>如何选择shell编程语言</h2><h3 id="熟悉-vs-陌生"><a href="#熟悉-vs-陌生" class="headerlink" title="熟悉 vs 陌生"></a>熟悉 vs 陌生</h3><p>如果你已经掌握了一门编程语言（如PHP、Python、Java、JavaScript），建议你就直接使用这门语言编写脚本程序，虽然某些地方会有点啰嗦，但你能利用在这门语言领域里的经验（单元测试、单步调试、IDE、第三方类库）。</p>
+<p>新增的学习成本很小，只要学会怎么使用shell解释器（Jshell、AdaScript）就可以了。</p>
+<h3 id="简单-vs-高级"><a href="#简单-vs-高级" class="headerlink" title="简单 vs 高级"></a>简单 vs 高级</h3><p>如果你觉得自己熟悉的语言（如Java、C）写shell脚本实在太啰嗦，你只是想做一些备份文件、安装软件、下载数据之类的事情，学着使用sh，bash会是一个好主意。</p>
+<p>shell只定义了一个非常简单的编程语言，所以，如果你的脚本程序复杂度较高，或者要操作的数据结构比较复杂，那么还是应该使用Python、Perl这样的脚本语言，或者是你本来就已经很擅长的高级语言。因为sh和bash在这方面很弱，比如说：</p>
+<ul>
+<li>它的函数只能返回字串，无法返回数组</li>
+<li>它不支持面向对象，你无法实现一些优雅的设计模式</li>
+<li>它是解释型的，一边解释一边执行，连PHP那种预编译都不是，如果你的脚本包含错误(例如调用了不存在的函数)，只要没执行到这一行，就不会报错</li>
+</ul>
+<h3 id="环境兼容性"><a href="#环境兼容性" class="headerlink" title="环境兼容性"></a>环境兼容性</h3><p>如果你的脚本是提供给别的用户使用，使用sh或者bash，你的脚本将具有最好的环境兼容性，perl很早就是linux标配了，python这些年也成了一些linux发行版的标配，至于mac os，它默认安装了perl、python、ruby、php、java等主流编程语言。</p>
+<h2 id="第一个shell脚本"><a href="#第一个shell脚本" class="headerlink" title="第一个shell脚本"></a>第一个shell脚本</h2><h3 id="编写"><a href="#编写" class="headerlink" title="编写"></a>编写</h3><p>打开文本编辑器，新建一个文件，扩展名为sh（sh代表shell），扩展名并不影响脚本执行，见名知意就好，如果你用php写shell 脚本，扩展名就用php好了。</p>
+<p>输入一些代码，第一行一般是这样：</p>
+<pre><code>#!/bin/bash
+#!/usr/bin/php</code></pre><p>“#!”是一个约定的标记，它告诉系统这个脚本需要什么解释器来执行。</p>
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><p>运行Shell脚本有两种方法：</p>
+<h4 id="作为可执行程序"><a href="#作为可执行程序" class="headerlink" title="作为可执行程序"></a>作为可执行程序</h4><pre><code>chmod +x test.sh
+./test.sh</code></pre><p>注意，一定要写成./test.sh，而不是test.sh，运行其它二进制的程序也一样，直接写test.sh，linux系统会去PATH里寻找有没有叫test.sh的，而只有/bin, /sbin, /usr/bin，/usr/sbin等在PATH里，你的当前目录通常不在PATH里，所以写成test.sh是会找不到命令的，要用./test.sh告诉系统说，就在当前目录找。</p>
+<p>通过这种方式运行bash脚本，第一行一定要写对，好让系统查找到正确的解释器。</p>
+<p>这里的”系统”，其实就是shell这个应用程序（想象一下Windows Explorer），但我故意写成系统，是方便理解，既然这个系统就是指shell，那么一个使用/bin/sh作为解释器的脚本是不是可以省去第一行呢？是的。</p>
+<h4 id="作为解释器参数"><a href="#作为解释器参数" class="headerlink" title="作为解释器参数"></a>作为解释器参数</h4><p>这种运行方式是，直接运行解释器，其参数就是shell脚本的文件名，如：</p>
+<pre><code>/bin/sh test.sh
+/bin/php test.php</code></pre><p>这种方式运行的脚本，不需要在第一行指定解释器信息，写了也没用。</p>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><h3 id="定义变量"><a href="#定义变量" class="headerlink" title="定义变量"></a>定义变量</h3><p>定义变量时，变量名不加美元符号（$），如：</p>
+<pre><code>your_name=&quot;qinjx&quot;</code></pre><p>注意，变量名和等号之间不能有空格，这可能和你熟悉的所有编程语言都不一样。</p>
+<p>除了显式地直接赋值，还可以用语句给变量赋值，如：</p>
+<pre><code>for file in `ls /etc`</code></pre><h3 id="使用变量"><a href="#使用变量" class="headerlink" title="使用变量"></a>使用变量</h3><p>使用一个定义过的变量，只要在变量名前面加美元符号即可，如：</p>
+<pre><code>your_name=&quot;qinjx&quot;
+echo $your_name
+echo ${your_name}</code></pre><p>变量名外面的花括号是可选的，加不加都行，加花括号是为了帮助解释器识别变量的边界，比如下面这种情况：</p>
+<pre><code>for skill in Ada Coffe Action Java; do
+    echo &quot;I am good at ${skill}Script&quot;
+done</code></pre><p>如果不给skill变量加花括号，写成echo “I am good at $skillScript”，解释器就会把$skillScript当成一个变量（其值为空），代码执行结果就不是我们期望的样子了。</p>
+<p>推荐给所有变量加上花括号，这是个好的编程习惯。IntelliJ IDEA编写shell script时，IDE就会提示加花括号。</p>
+<h3 id="重定义变量"><a href="#重定义变量" class="headerlink" title="重定义变量"></a>重定义变量</h3><p>已定义的变量，可以被重新定义，如：</p>
+<pre><code>your_name=&quot;qinjx&quot;
+echo $your_name
+
+your_name=&quot;alibaba&quot;
+echo $your_name</code></pre><p>这样写是合法的，但注意，第二次赋值的时候不能写$your_name=”alibaba”，使用变量的时候才加美元符。</p>
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>以“#”开头的行就是注释，会被解释器忽略。</p>
+<h3 id="多行注释"><a href="#多行注释" class="headerlink" title="多行注释"></a>多行注释</h3><p>sh里没有多行注释，只能每一行加一个#号。就像这样：</p>
+<pre><code>#--------------------------------------------
+# 这是一个自动打ipa的脚本，基于webfrogs的ipa-build书写：https://github.com/webfrogs/xcode_shell/blob/master/ipa-build
+
+# 功能：自动为etao ios app打包，产出物为14个渠道的ipa包
+# 特色：全自动打包，不需要输入任何参数
+#--------------------------------------------
+
+##### 用户配置区 开始 #####
+#
+#
+# 项目根目录，推荐将此脚本放在项目的根目录，这里就不用改了
+# 应用名，确保和Xcode里Product下的target_name.app名字一致
+#
+##### 用户配置区 结束  #####</code></pre><p>如果在开发过程中，遇到大段的代码需要临时注释起来，过一会儿又取消注释，怎么办呢？每一行加个#符号太费力了，可以把这一段要注释的代码用一对花括号括起来，定义成一个函数，没有地方调用这个函数，这块代码就不会执行，达到了和注释一样的效果。</p>
+<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><p>字符串是shell编程中最常用最有用的数据类型（除了数字和字符串，也没啥其它类型好用了，哈哈），字符串可以用单引号，也可以用双引号，也可以不用引号。单双引号的区别跟PHP类似。</p>
+<h3 id="单引号"><a href="#单引号" class="headerlink" title="单引号"></a>单引号</h3><pre><code>str=&apos;this is a string&apos;</code></pre><p>单引号字符串的限制：</p>
+<ul>
+<li>单引号里的任何字符都会原样输出，单引号字符串中的变量是无效的</li>
+<li>单引号字串中不能出现单引号（对单引号使用转义符后也不行）</li>
+</ul>
+<h3 id="双引号"><a href="#双引号" class="headerlink" title="双引号"></a>双引号</h3><pre><code>your_name=&apos;qinjx&apos;
+str=&quot;Hello, I know your are \&quot;$your_name\&quot;! \n&quot;</code></pre><ul>
+<li>双引号里可以有变量</li>
+<li>双引号里可以出现转义字符</li>
+</ul>
+<h3 id="字符串操作"><a href="#字符串操作" class="headerlink" title="字符串操作"></a>字符串操作</h3><h4 id="拼接字符串"><a href="#拼接字符串" class="headerlink" title="拼接字符串"></a>拼接字符串</h4><pre><code>your_name=&quot;qinjx&quot;
+greeting=&quot;hello, &quot;$your_name&quot; !&quot;
+greeting_1=&quot;hello, ${your_name} !&quot;
+
+echo $greeting $greeting_1</code></pre><h4 id="获取字符串长度："><a href="#获取字符串长度：" class="headerlink" title="获取字符串长度："></a>获取字符串长度：</h4><pre><code>string=&quot;abcd&quot;
+echo ${#string} #输出：4</code></pre><h4 id="提取子字符串"><a href="#提取子字符串" class="headerlink" title="提取子字符串"></a>提取子字符串</h4><pre><code>string=&quot;alibaba is a great company&quot;
+echo ${string:1:4} #输出：liba</code></pre><h4 id="查找子字符串"><a href="#查找子字符串" class="headerlink" title="查找子字符串"></a>查找子字符串</h4><pre><code>string=&quot;alibaba is a great company&quot;
+echo `expr index &quot;$string&quot; is`#输出：3，这个语句的意思是：找出字母i在这名话中的位置，要在linux下运行，mac下会报错</code></pre><h4 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h4><p>参见本文档末尾的参考资料中<a href="http://tldp.org/LDP/abs/html/string-manipulation.html" target="_blank" rel="noopener">Advanced Bash-Scripting Guid Chapter 10.1</a></p>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><h2 id="条件判断"><a href="#条件判断" class="headerlink" title="条件判断"></a>条件判断</h2><h2 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h2><p>和Java、PHP等语言不一样，sh的流程控制不可为空，如：</p>
+<pre><code>&lt;?php
+if (isset($_GET[&quot;q&quot;])) {
+    search(q);
+}
+else {
+    //do nothing
+}</code></pre><p>在sh/bash里可不能这么写，如果else分支没有语句执行，就不要写这个else。</p>
+<p>还要注意，sh里的if [ $foo -eq 0 ]，这个方括号跟Java/PHP里if后面的圆括号大不相同，它是一个可执行程序（和ls, grep一样），想不到吧？在CentOS上，它在/usr/bin目录下：</p>
+<pre><code>ll /usr/bin/[
+-rwxr-xr-x. 1 root root 33408 6月  22 2012 /usr/bin/[</code></pre><p>正因为方括号在这里是一个可执行程序，方括号后面必须加空格，不能写成if [$foo -eq 0]</p>
+<h3 id="if-else"><a href="#if-else" class="headerlink" title="if else"></a>if else</h3><h4 id="if"><a href="#if" class="headerlink" title="if"></a>if</h4><pre><code>if condition
+then
+    command1 
+    command2
+    ...
+    commandN 
+fi</code></pre><p>写成一行（适用于终端命令提示符）：</p>
+<pre><code>if `ps -ef | grep ssh`;  then echo hello; fi</code></pre><p>末尾的fi就是if倒过来拼写，后面还会遇到类似的</p>
+<h4 id="if-else-1"><a href="#if-else-1" class="headerlink" title="if else"></a>if else</h4><pre><code>if condition
+then
+    command1 
+    command2
+    ...
+    commandN
+else
+    command
+fi</code></pre><h4 id="if-else-if-else"><a href="#if-else-if-else" class="headerlink" title="if else-if else"></a>if else-if else</h4><pre><code>if condition1
+then
+    command1
+elif condition2
+    command2
+else
+    commandN
+fi</code></pre><h3 id="for-while"><a href="#for-while" class="headerlink" title="for while"></a>for while</h3><h4 id="for"><a href="#for" class="headerlink" title="for"></a>for</h4><p>在开篇的示例里演示过了：</p>
+<pre><code>for var in item1 item2 ... itemN
+do
+    command1
+    command2
+    ...
+    commandN
+done</code></pre><p>写成一行：</p>
+<pre><code>for var in item1 item2 ... itemN; do command1; command2… done;</code></pre><h4 id="C风格的for"><a href="#C风格的for" class="headerlink" title="C风格的for"></a>C风格的for</h4><pre><code>for (( EXP1; EXP2; EXP3 ))
+do
+    command1
+    command2
+    command3
+done</code></pre><h4 id="while"><a href="#while" class="headerlink" title="while"></a>while</h4><pre><code>while condition
+do
+    command
+done</code></pre><h4 id="无限循环"><a href="#无限循环" class="headerlink" title="无限循环"></a>无限循环</h4><pre><code>while :
+do
+    command
+done</code></pre><p>或者</p>
+<pre><code>while true
+do
+    command
+done</code></pre><p>或者</p>
+<pre><code>for (( ; ; ))</code></pre><h4 id="until"><a href="#until" class="headerlink" title="until"></a>until</h4><pre><code>until condition
+do
+    command
+done</code></pre><h3 id="case"><a href="#case" class="headerlink" title="case"></a>case</h3><pre><code>case &quot;${opt}&quot; in
+    &quot;Install-Puppet-Server&quot; )
+        install_master $1
+        exit
+    ;;
+
+    &quot;Install-Puppet-Client&quot; )
+        install_client $1
+        exit
+    ;;
+
+    &quot;Config-Puppet-Server&quot; )
+        config_puppet_master
+        exit
+    ;;
+
+    &quot;Config-Puppet-Client&quot; )
+        config_puppet_client
+        exit
+    ;;
+
+    &quot;Exit&quot; )
+        exit
+    ;;
+
+    * ) echo &quot;Bad option, please choose again&quot;
+esac</code></pre><p>case的语法和C family语言差别很大，它需要一个esac（就是case反过来）作为结束标记，每个case分支用右圆括号，用两个分号表示break</p>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><h3 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h3><h2 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h2><p>可以使用source和.关键字，如：</p>
+<pre><code>source ./function.sh
+. ./function.sh</code></pre><p>在bash里，source和.是等效的，他们都是读入function.sh的内容并执行其内容（类似PHP里的include），为了更好的可移植性，推荐使用第二种写法。</p>
+<p>包含一个文件和执行一个文件一样，也要写这个文件的路径，不能光写文件名，比如上述例子中:</p>
+<pre><code>. ./function.sh</code></pre><p>不可以写作：</p>
+<pre><code>. function.sh</code></pre><p>如果function.sh是用户传入的参数，如何获得它的绝对路径呢？方法是：</p>
+<pre><code>real_path=`readlink -f $1`#$1是用户输入的参数，如function.sh
+. $real_path</code></pre><h2 id="用户输入"><a href="#用户输入" class="headerlink" title="用户输入"></a>用户输入</h2><h3 id="执行脚本时传入"><a href="#执行脚本时传入" class="headerlink" title="执行脚本时传入"></a>执行脚本时传入</h3><h3 id="脚本运行中输入"><a href="#脚本运行中输入" class="headerlink" title="脚本运行中输入"></a>脚本运行中输入</h3><h3 id="select菜单"><a href="#select菜单" class="headerlink" title="select菜单"></a>select菜单</h3><h2 id="stdin和stdout"><a href="#stdin和stdout" class="headerlink" title="stdin和stdout"></a>stdin和stdout</h2><h2 id="常用的命令"><a href="#常用的命令" class="headerlink" title="常用的命令"></a>常用的命令</h2><p>sh脚本结合系统命令便有了强大的威力，在字符处理领域，有grep、awk、sed三剑客，grep负责找出特定的行，awk能将行拆分成多个字段，sed则可以实现更新插入删除等写操作。</p>
+<h3 id="ps"><a href="#ps" class="headerlink" title="ps"></a>ps</h3><p>查看进程列表</p>
+<h3 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h3><h4 id="排除grep自身"><a href="#排除grep自身" class="headerlink" title="排除grep自身"></a>排除grep自身</h4><h4 id="查找与target相邻的结果"><a href="#查找与target相邻的结果" class="headerlink" title="查找与target相邻的结果"></a>查找与target相邻的结果</h4><h3 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h3><h3 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h3><h4 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h4><h4 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h4><h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><h3 id="xargs"><a href="#xargs" class="headerlink" title="xargs"></a>xargs</h3><h3 id="curl"><a href="#curl" class="headerlink" title="curl"></a>curl</h3><h2 id="综合案例"><a href="#综合案例" class="headerlink" title="综合案例"></a>综合案例</h2><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="http://tldp.org/LDP/abs/html/" target="_blank" rel="noopener">Advanced Bash-Scripting Guide</a>，非常详细，非常易读，大量example，既可以当入门教材，也可以当做工具书查阅</li>
+<li><a href="http://www.tutorialspoint.com/unix/unix-shell.htm" target="_blank" rel="noopener">Unix Shell Programming</a></li>
+<li><a href="http://bash.cyberciti.biz/guide/Main_Page" target="_blank" rel="noopener">Linux Shell Scripting Tutorial - A Beginner’s handbook</a></li>
+</ul>
+
+</div>
+
+
+    <div class="post-guide">
+        <div class="item left">
+            
+        </div>
+        <div class="item right">
+            
+              <a href="/2020/08/14/8-%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86-/1-Word2vec%E5%AE%9E%E7%8E%B0/">
+                
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+              </a>
+            
+        </div>
+    </div>
+
+
+
+	<div id="vcomments"></div>
+
+
+<script>
+	
+		// 评论
+		new Valine({
+			av: AV,
+			el: '#vcomments',
+			notify: false,
+			verify: false,
+			path: window.location.pathname,
+			appId: '8jsytjjIGzdCFAwwgzvVXPVz-MdYXbMMI',
+			appKey: 'RAfk6QXrVENV0y2tkKfMTsT1',
+			placeholder: '请输入评论',
+			avatar: 'retro',
+			recordIP: false
+		})
+	
+	
+    // 显示次数
+		function showTime(Counter) {
+			var query = new AV.Query("Counter");
+			if($(".leancloud_visitors").length > 0){
+				var url = $(".leancloud_visitors").attr('id').trim();
+				// where field
+				query.equalTo("words", url);
+				// count
+				query.count().then(function (number) {
+					// There are number instances of MyClass where words equals url.
+					$(document.getElementById(url)).text(number?  number : '--');
+				}, function (error) {
+					// error is an instance of AVError.
+				});
+			}
+		}
+		// 追加pv
+		function addCount(Counter) {
+			var url = $(".leancloud_visitors").length > 0 ? $(".leancloud_visitors").attr('id').trim() : 'wujun234.github.io';
+			var Counter = AV.Object.extend("Counter");
+			var query = new Counter;
+			query.save({
+				words: url
+			}).then(function (object) {
+			})
+		}
+		$(function () {
+			var Counter = AV.Object.extend("Counter");
+			addCount(Counter);
+			showTime(Counter);
+		});
+	
+</script>
+	</div>
+	<div id="footer">
+	<p>
+	©2019-<span id="footerYear"></span> 
+	<a href="/">Tim Huang</a> 
+	
+	
+		|
+		<span id="busuanzi_container_site_pv">
+			pv
+			<span id="busuanzi_value_site_pv"></span>
+		</span>
+		|
+		<span id="busuanzi_container_site_uv"> 
+			uv
+			<span id="busuanzi_value_site_uv"></span>
+		</span>
+	
+	<br>
+	
+	
+	
+	Powered by <a href="//hexo.io" target="_blank">Hexo</a>
+	
+	</p>
+</div>
+<script type="text/javascript"> 
+	document.getElementById('footerYear').innerHTML = new Date().getFullYear() + '';
+</script>
+	<button id="totop-toggle" class="toggle"><i class="fa fa-angle-double-up" aria-hidden="true"></i></button>
+</body>
+</html>
