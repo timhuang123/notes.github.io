@@ -9,7 +9,7 @@
 	
 	<title>
 	
-		逻辑回归 | 
+		4-Linux指令/Git使用/Git使用 | 
 	 
 	Coding Is Creating
 	</title>
@@ -246,7 +246,7 @@
 							</ul>
 			
 							<ul>
-								<li class="file active">
+								<li class="file">
 									<a href="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92-%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E5%92%8C%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E4%BC%98%E5%8C%96/">
 										逻辑回归-梯度下降和最小二乘法优化
 									</a>
@@ -309,7 +309,7 @@
 									</a>
 									
 							<ul>
-								<li class="file">
+								<li class="file active">
 									<a href="/2020/08/28/4-Linux%E6%8C%87%E4%BB%A4/Git%E4%BD%BF%E7%94%A8/Git%E4%BD%BF%E7%94%A8/">
 										Git使用
 									</a>
@@ -471,16 +471,16 @@
 	<div id="content">
 		<h1 id="article-title">
 
-	逻辑回归-梯度下降和最小二乘法优化
+	Git使用
 </h1>
 <div class="article-meta">
 	
 		<span>
-			阅读量:<span id="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92-%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E5%92%8C%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E4%BC%98%E5%8C%96/" class="leancloud_visitors" data-flag-title="逻辑回归"></span>
+			阅读量:<span id="/2020/08/28/4-Linux%E6%8C%87%E4%BB%A4/Git%E4%BD%BF%E7%94%A8/Git%E4%BD%BF%E7%94%A8/" class="leancloud_visitors" data-flag-title="4-Linux指令/Git使用/Git使用"></span>
 		</span>
 	
 	<span>Tim Huang</span>
-	<span>2020-07-18 17:07:08</span>
+	<span>2020-08-28 20:57:41</span>
     
 		<div id="article-categories">
             
@@ -489,82 +489,22 @@
 </div>
 
 <div id="article-content">
-	<p>有两种优化方式，梯度下降和最小二乘法。</p>
-<h2 id="代码-logistic-regression-py"><a href="#代码-logistic-regression-py" class="headerlink" title="代码 logistic_regression.py"></a>代码 logistic_regression.py</h2><pre><code>import numpy as np
-import math
-from mlfromscratch.utils import make_diagonal, Plot
-from mlfromscratch.deep_learning.activation_functions import Sigmoid
+	<h2 id="Git-简介"><a href="#Git-简介" class="headerlink" title="Git 简介"></a>Git 简介</h2><p>Git是分布式版本控制工具。首先是一个版本管理工具，Git会把文档的改动记录下来，把文档的状态作为更新记录保存起来。因此可以把编辑过的文档复原到以前的状态，也可以显示编辑前后的内容差异；而且不同编辑者，试图覆盖较新的文件的时候（即上传文件到服务器时），系统会发出警告，因此可以避免在无意中覆盖了他人的编辑内容。</p>
+<p>Git工作流程如下：</p>
+<p>克隆 Git 资源作为工作目录。<br>在克隆的资源上添加或修改文件。<br>如果其他人修改了，你可以更新资源。<br>在提交前查看修改。<br>提交修改。<br>在修改完成后，如果发现错误，可以撤回提交并再次修改并提交。<br>下图展示了 Git 的工作流程：</p>
+<p><img src="/images/git-process.png" alt="img"></p>
 
-
-class LogisticRegression():
-    &quot;&quot;&quot; Logistic Regression classifier.
-    Parameters:
-    -----------
-    learning_rate: float
-        The step length that will be taken when following the negative gradient during
-        training.
-    gradient_descent: boolean
-        True or false depending if gradient descent should be used when training. If
-        false then we use batch optimization by least squares.
-    &quot;&quot;&quot;
-    def __init__(self, learning_rate=.1, gradient_descent=True):
-        self.param = None
-        self.learning_rate = learning_rate
-        self.gradient_descent = gradient_descent
-        self.sigmoid = Sigmoid()
-
-    def _initialize_parameters(self, X):
-        n_features = np.shape(X)[1]
-        # Initialize parameters between [-1/sqrt(N), 1/sqrt(N)]
-        limit = 1 / math.sqrt(n_features)
-        self.param = np.random.uniform(-limit, limit, (n_features,))
-
-    def fit(self, X, y, n_iterations=4000):
-        self._initialize_parameters(X)
-        # Tune parameters for n iterations
-        for i in range(n_iterations):
-            # Make a new prediction
-            y_pred = self.sigmoid(X.dot(self.param))
-            if self.gradient_descent:
-                # Move against the gradient of the loss function with
-                # respect to the parameters to minimize the loss
-                self.param -= self.learning_rate * -(y - y_pred).dot(X)
-            else:
-                # Make a diagonal matrix of the sigmoid gradient column vector
-                diag_gradient = make_diagonal(self.sigmoid.gradient(X.dot(self.param)))
-                # Batch opt:
-                self.param = np.linalg.pinv(X.T.dot(diag_gradient).dot(X)).dot(X.T).dot(diag_gradient.dot(X).dot(self.param) + y - y_pred)
-
-    def predict(self, X):
-        y_pred = np.round(self.sigmoid(X.dot(self.param))).astype(int)
-        return y_pred</code></pre><h2 id="实际用例"><a href="#实际用例" class="headerlink" title="实际用例"></a>实际用例</h2><pre><code>import logistic_regression
-import numpy as np
-
-#dataset
-X=np.ones((3,3))
-y=np.ones((3))
-#建立模型
-model=logistic_regression.LogisticRegression()
-model.fit(X,y)
-#预测
-pred=model.predict(np.array([1,2,3]))
-print(pred)</code></pre>
 </div>
 
 
     <div class="post-guide">
         <div class="item left">
             
-              <a href="/2020/07/18/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/%E5%86%B3%E7%AD%96%E6%A0%91-Decision%20Trees/">
-                  <i class="fa fa-angle-left" aria-hidden="true"></i>
-                  决策树-Decision Trees
-              </a>
-            
         </div>
         <div class="item right">
             
-              <a href="/2020/07/16/3-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81/%E7%94%A8Numpy%E5%86%99%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">
-                用Numpy写神经网络
+              <a href="/2020/08/28/4-Linux%E6%8C%87%E4%BB%A4/%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8Vim/Vim%E4%BD%BF%E7%94%A8/">
+                Vim使用
                 <i class="fa fa-angle-right" aria-hidden="true"></i>
               </a>
             
