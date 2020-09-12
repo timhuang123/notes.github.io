@@ -292,11 +292,13 @@ a {
 	font-size: 25px;
 	padding-left: 10px;
 	border-bottom: 1px solid #ddd;
+
 }
 #article-content h3 {
 	line-height: 40px;
 	margin: 10px 0 5px;
 	font-size: 22px
+
 }
 #article-content h4,
 #article-content h5,
@@ -326,6 +328,8 @@ a {
 #article-content p {
 	line-height: 20px;
 	margin-bottom: 10px;
+	line-height: 35px;
+
 }
 #article-content ul code,
 #article-content ol code,
