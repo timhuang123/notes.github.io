@@ -9,7 +9,7 @@
 	
 	<title>
 	
-		用Numpy写一个简易神经网络 | 
+		04-手撕常用机器学习代码-ML from Scratch/4.3-XGBoost | 
 	 
 	Coding Is Creating
 	</title>
@@ -525,6 +525,24 @@
 			
 							<ul>
 								<li class="file">
+									<a href="/2020/09/12/04-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81-ML%20from%20Scratch/4.4-GradientBoost/">
+										4.4-GradientBoost
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
+									<a href="/2020/09/12/04-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81-ML%20from%20Scratch/4.4-RandomForest/">
+										4.4-RandomForest
+									</a>
+								</li>
+								<div class="article-toc" style="display: none;"></div>
+							</ul>
+			
+							<ul>
+								<li class="file">
 									<a href="/2020/09/01/04-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81-ML%20from%20Scratch/%E5%85%B6%E5%AE%83-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84variance%E5%92%8Cbias/">
 										其它-机器学习中的variance和bias
 									</a>
@@ -754,7 +772,7 @@
 <div class="article-meta">
 	
 		<span>
-			阅读量:<span id="/2020/07/18/04-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81-ML%20from%20Scratch/4.3-XGBoost/" class="leancloud_visitors" data-flag-title="用Numpy写一个简易神经网络"></span>
+			阅读量:<span id="/2020/07/18/04-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81-ML%20from%20Scratch/4.3-XGBoost/" class="leancloud_visitors" data-flag-title="04-手撕常用机器学习代码-ML from Scratch/4.3-XGBoost"></span>
 		</span>
 	
 	<span>Tim Huang</span>
@@ -768,53 +786,297 @@
 
 <div id="article-content">
 	<p>造轮子不是目的，但是造轮子可以更好地理解神经网络的底层工作原理。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>#数据集
-import numpy as np
-feature_set = np.array([[0,1,0],[0,0,1],[1,0,0],[1,1,0],[1,1,1]])
-labels = np.array([[1,0,0,1,1]])
-labels = labels.reshape(5,1)
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="决策节点类"><a href="#决策节点类" class="headerlink" title="决策节点类"></a>决策节点类</h3><pre><code>class DecisionNode():
+    &quot;&quot;&quot;Class that represents a decision node or leaf in the decision tree
 
-#初始化参数
-np.random.seed(42)
-weights = np.random.rand(3,1)
-bias = np.random.rand(1)
-lr = 0.05
+    Parameters:
+    -----------
+    feature_i: int
+        Feature index which we want to use as the threshold measure.
+    threshold: float
+        The value that we will compare feature values at feature_i against to
+        determine the prediction.
+    value: float
+        The class prediction if classification tree, or float value if regression tree.
+    true_branch: DecisionNode
+        Next decision node for samples where features value met the threshold.
+    false_branch: DecisionNode
+        Next decision node for samples where features value did not meet the threshold.
+    &quot;&quot;&quot;
+    def __init__(self, feature_i=None, threshold=None,
+                value=None, true_branch=None, false_branch=None):
+        self.feature_i = feature_i          # Index for the feature that is tested
+        self.threshold = threshold          # Threshold value for feature
+        self.value = value                  # Value if the node is a leaf in the tree
+        self.true_branch = true_branch      # &apos;Left&apos; subtree
+        self.false_branch = false_branch    # &apos;Right&apos; subtree</code></pre><h3 id="决策树类"><a href="#决策树类" class="headerlink" title="决策树类"></a>决策树类</h3><pre><code># Super class of RegressionTree and ClassificationTree
+class DecisionTree(object):
+    &quot;&quot;&quot;Super class of RegressionTree and ClassificationTree.
 
-#定义活化函数
-def sigmoid(x):
-    return 1/(1+np.exp(-x))
-#活化函数的导数 -- 用于反向传播
-def sigmoid_der(x):
-    return sigmoid(x)*(1-sigmoid(x))
+    Parameters:
+    -----------
+    min_samples_split: int
+        The minimum number of samples needed to make a split when building a tree.
+    min_impurity: float
+        The minimum impurity required to split the tree further.
+    max_depth: int
+        The maximum depth of a tree.
+    loss: function
+        Loss function that is used for Gradient Boosting models to calculate impurity.
+    &quot;&quot;&quot;
+    def __init__(self, min_samples_split=2, min_impurity=1e-7,
+                max_depth=float(&quot;inf&quot;), loss=None):
+        self.root = None  # Root node in dec. tree
+        # Minimum n of samples to justify split
+        self.min_samples_split = min_samples_split
+        # The minimum impurity to justify split
+        self.min_impurity = min_impurity
+        # The maximum depth to grow the tree to
+        self.max_depth = max_depth
+        # Function to calculate impurity (classif.=&gt;info gain, regr=&gt;variance reduct.)
+        self._impurity_calculation = None
+        # Function to determine prediction of y at leaf
+        self._leaf_value_calculation = None
+        # If y is one-hot encoded (multi-dim) or not (one-dim)
+        self.one_dim = None
+        # If Gradient Boost
+        self.loss = loss
 
-#训练过程
-for epoch in range(20000):
-    inputs = feature_set
+    def fit(self, X, y, loss=None):
+        &quot;&quot;&quot; Build decision tree &quot;&quot;&quot;
+        self.one_dim = len(np.shape(y)) == 1
+        self.root = self._build_tree(X, y)
+        self.loss=None
 
-    # feedforward step1
-    XW = np.dot(feature_set, weights) + bias
+    def _build_tree(self, X, y, current_depth=0):
+        &quot;&quot;&quot; Recursive method which builds out the decision tree and splits X and respective y
+        on the feature of X which (based on impurity) best separates the data&quot;&quot;&quot;
 
-    #feedforward step2
-    z = sigmoid(XW)
+        largest_impurity = 0
+        best_criteria = None    # Feature index and threshold
+        best_sets = None        # Subsets of the data
+
+        # Check if expansion of y is needed
+        if len(np.shape(y)) == 1:
+            y = np.expand_dims(y, axis=1)
+
+        # Add y as last column of X
+        Xy = np.concatenate((X, y), axis=1)
+
+        n_samples, n_features = np.shape(X)
+
+        if n_samples &gt;= self.min_samples_split and current_depth &lt;= self.max_depth:
+            # Calculate the impurity for each feature
+            for feature_i in range(n_features):
+                # All values of feature_i
+                feature_values = np.expand_dims(X[:, feature_i], axis=1)
+                unique_values = np.unique(feature_values)
+
+                # Iterate through all unique values of feature column i and
+                # calculate the impurity
+                for threshold in unique_values:
+                    # Divide X and y depending on if the feature value of X at index feature_i
+                    # meets the threshold
+                    Xy1, Xy2 = divide_on_feature(Xy, feature_i, threshold)
+
+                    if len(Xy1) &gt; 0 and len(Xy2) &gt; 0:
+                        # Select the y-values of the two sets
+                        y1 = Xy1[:, n_features:]
+                        y2 = Xy2[:, n_features:]
+
+                        # Calculate impurity
+                        impurity = self._impurity_calculation(y, y1, y2)
+
+                        # If this threshold resulted in a higher information gain than previously
+                        # recorded save the threshold value and the feature
+                        # index
+                        if impurity &gt; largest_impurity:
+                            largest_impurity = impurity
+                            best_criteria = {&quot;feature_i&quot;: feature_i, &quot;threshold&quot;: threshold}
+                            best_sets = {
+                                &quot;leftX&quot;: Xy1[:, :n_features],   # X of left subtree
+                                &quot;lefty&quot;: Xy1[:, n_features:],   # y of left subtree
+                                &quot;rightX&quot;: Xy2[:, :n_features],  # X of right subtree
+                                &quot;righty&quot;: Xy2[:, n_features:]   # y of right subtree
+                                }
+
+        if largest_impurity &gt; self.min_impurity:
+            # Build subtrees for the right and left branches
+            true_branch = self._build_tree(best_sets[&quot;leftX&quot;], best_sets[&quot;lefty&quot;], current_depth + 1)
+            false_branch = self._build_tree(best_sets[&quot;rightX&quot;], best_sets[&quot;righty&quot;], current_depth + 1)
+            return DecisionNode(feature_i=best_criteria[&quot;feature_i&quot;], threshold=best_criteria[
+                                &quot;threshold&quot;], true_branch=true_branch, false_branch=false_branch)
+
+        # We&apos;re at leaf =&gt; determine value
+        leaf_value = self._leaf_value_calculation(y)
+
+        return DecisionNode(value=leaf_value)
 
 
-    # backpropagation step 1
-    error = z - labels
+    def predict_value(self, x, tree=None):
+        &quot;&quot;&quot; Do a recursive search down the tree and make a prediction of the data sample by the
+            value of the leaf that we end up at &quot;&quot;&quot;
 
-    print(error.sum())
+        if tree is None:
+            tree = self.root
 
-    # backpropagation step 2
-    dcost_dpred = error
-    dpred_dz = sigmoid_der(z)
+        # If we have a value (i.e we&apos;re at a leaf) =&gt; return value as the prediction
+        if tree.value is not None:
+            return tree.value
 
-    z_delta = dcost_dpred * dpred_dz
+        # Choose the feature that we will test
+        feature_value = x[tree.feature_i]
 
-    inputs = feature_set.T
-    weights -= lr * np.dot(inputs, z_delta)
+        # Determine if we will follow left or right branch
+        branch = tree.false_branch
+        if isinstance(feature_value, int) or isinstance(feature_value, float):
+            if feature_value &gt;= tree.threshold:
+                branch = tree.true_branch
+        elif feature_value == tree.threshold:
+            branch = tree.true_branch
 
-    for num in z_delta:
-        bias -= lr * num</code></pre><p>稍后详细解释。</p>
+        # Test subtree
+        return self.predict_value(x, branch)
 
+    def predict(self, X):
+        &quot;&quot;&quot; Classify samples one by one and return the set of labels &quot;&quot;&quot;
+        y_pred = [self.predict_value(sample) for sample in X]
+        return y_pred</code></pre><h3 id="XGBoost-RegressionTree类"><a href="#XGBoost-RegressionTree类" class="headerlink" title="XGBoost RegressionTree类"></a>XGBoost RegressionTree类</h3><pre><code>class XGBoostRegressionTree(DecisionTree):
+    &quot;&quot;&quot;
+    Regression tree for XGBoost
+    - Reference -
+    http://xgboost.readthedocs.io/en/latest/model.html
+    &quot;&quot;&quot;
+
+    def _split(self, y):
+        &quot;&quot;&quot; y contains y_true in left half of the middle column and
+        y_pred in the right half. Split and return the two matrices &quot;&quot;&quot;
+        col = int(np.shape(y)[1]/2)
+        y, y_pred = y[:, :col], y[:, col:]
+        return y, y_pred
+
+    def _gain(self, y, y_pred):
+        nominator = np.power((y * self.loss.gradient(y, y_pred)).sum(), 2)
+        denominator = self.loss.hess(y, y_pred).sum()
+        return 0.5 * (nominator / denominator)
+
+    def _gain_by_taylor(self, y, y1, y2):
+        # Split
+        y, y_pred = self._split(y)
+        y1, y1_pred = self._split(y1)
+        y2, y2_pred = self._split(y2)
+
+        true_gain = self._gain(y1, y1_pred)
+        false_gain = self._gain(y2, y2_pred)
+        gain = self._gain(y, y_pred)
+        return true_gain + false_gain - gain
+
+    def _approximate_update(self, y):
+        # y split into y, y_pred
+        y, y_pred = self._split(y)
+        # Newton&apos;s Method
+        gradient = np.sum(y * self.loss.gradient(y, y_pred), axis=0)
+        hessian = np.sum(self.loss.hess(y, y_pred), axis=0)
+        update_approximation =  gradient / hessian
+
+        return update_approximation
+
+    def fit(self, X, y):
+        self._impurity_calculation = self._gain_by_taylor
+        self._leaf_value_calculation = self._approximate_update
+        super(XGBoostRegressionTree, self).fit(X, y)</code></pre><h3 id="主角出场，最终XGBoost-Classifier"><a href="#主角出场，最终XGBoost-Classifier" class="headerlink" title="主角出场，最终XGBoost Classifier"></a>主角出场，最终XGBoost Classifier</h3><pre><code>#定义loss
+class LogisticLoss():
+    def __init__(self):
+        sigmoid = Sigmoid()
+        self.log_func = sigmoid
+        self.log_grad = sigmoid.gradient
+
+    def loss(self, y, y_pred):
+        y_pred = np.clip(y_pred, 1e-15, 1 - 1e-15)
+        p = self.log_func(y_pred)
+        return y * np.log(p) + (1 - y) * np.log(1 - p)
+
+    # gradient w.r.t y_pred
+    def gradient(self, y, y_pred):
+        p = self.log_func(y_pred)
+        return -(y - p)
+
+    # w.r.t y_pred
+    def hess(self, y, y_pred):
+        p = self.log_func(y_pred)
+        return p * (1 - p)
+
+
+class XGBoost(object):
+    &quot;&quot;&quot;The XGBoost classifier.
+
+    Reference: http://xgboost.readthedocs.io/en/latest/model.html
+
+    Parameters:
+    -----------
+    n_estimators: int
+        The number of classification trees that are used.
+    learning_rate: float
+        The step length that will be taken when following the negative gradient during
+        training.
+    min_samples_split: int
+        The minimum number of samples needed to make a split when building a tree.
+    min_impurity: float
+        The minimum impurity required to split the tree further. 
+    max_depth: int
+        The maximum depth of a tree.
+    &quot;&quot;&quot;
+    def __init__(self, n_estimators=200, learning_rate=0.001, min_samples_split=2,
+                min_impurity=1e-7, max_depth=2):
+        self.n_estimators = n_estimators            # Number of trees
+        self.learning_rate = learning_rate          # Step size for weight update
+        self.min_samples_split = min_samples_split  # The minimum n of sampels to justify split
+        self.min_impurity = min_impurity              # Minimum variance reduction to continue
+        self.max_depth = max_depth                  # Maximum depth for tree
+
+        self.bar = progressbar.ProgressBar(widgets=bar_widgets)
+
+        # Log loss for classification
+        self.loss = LogisticLoss()
+
+        # Initialize regression trees
+        self.trees = []
+        for _ in range(n_estimators):
+            tree = XGBoostRegressionTree(
+                    min_samples_split=self.min_samples_split,
+                    min_impurity=min_impurity,
+                    max_depth=self.max_depth,
+                    loss=self.loss)
+
+            self.trees.append(tree)
+
+    def fit(self, X, y):
+        y = to_categorical(y)
+
+        y_pred = np.zeros(np.shape(y))
+        for i in self.bar(range(self.n_estimators)):
+            tree = self.trees[i]
+            y_and_pred = np.concatenate((y, y_pred), axis=1)
+            tree.fit(X, y_and_pred)
+            update_pred = tree.predict(X)
+
+            y_pred -= np.multiply(self.learning_rate, update_pred)
+
+    def predict(self, X):
+        y_pred = None
+        # Make predictions
+        for tree in self.trees:
+            # Estimate gradient and update prediction
+            update_pred = tree.predict(X)
+            if y_pred is None:
+                y_pred = np.zeros_like(update_pred)
+            y_pred -= np.multiply(self.learning_rate, update_pred)
+
+        # Turn into probability distribution (Softmax)
+        y_pred = np.exp(y_pred) / np.sum(np.exp(y_pred), axis=1, keepdims=True)
+        # Set label to the value that maximizes probability
+        y_pred = np.argmax(y_pred, axis=1)
+        return y_pred</code></pre>
 </div>
 
 
