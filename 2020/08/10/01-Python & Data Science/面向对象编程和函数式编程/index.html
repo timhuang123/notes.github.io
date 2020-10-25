@@ -797,7 +797,7 @@
 	<h2 id="函数式编程（functional-programming）"><a href="#函数式编程（functional-programming）" class="headerlink" title="函数式编程（functional programming）"></a>函数式编程（functional programming）</h2><p>函数式编程与命令式编程最大的不同其实在于：函数式编程关心数据的映射，命令式编程关心解决问题的步骤。这里的映射就是数学上「函数」的概念——一种东西和另一种东西之间的对应关系。这也是为什么「函数式编程」叫做「函数」式编程。</p>
 <p>函数式编程源自于数学理论，它似乎也更适用于数学计算相关的场景，因此本文以一个简单的数据处理问题为例，逐步介绍 Python 函数式编程。</p>
 <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>计算 N 位同学在某份试卷的 M 道选择题上的得分（每道题目的分值不同）。</p>
-<p>首先构造试卷答案和各位同学的解答数据。</p>
+<p>构造试卷答案和各位同学的解答数据。</p>
 <pre><code>import random
 from collections import namedtuple
 
@@ -824,7 +824,7 @@ students = [
 print(quiz)
 # [(&apos;A&apos;, 3), (&apos;B&apos;, 1), (&apos;D&apos;, 1), ...
 print(students)
-# [Student(id=1, ans=[&apos;C&apos;, &apos;B&apos;, &apos;A&apos;, ...</code></pre><p>首先看看面向过程的解答方法</p>
+# [Student(id=1, ans=[&apos;C&apos;, &apos;B&apos;, &apos;A&apos;, ...</code></pre><p>首先面向过程的解答方法</p>
 <pre><code>def normal(students, quiz):
     for student in students:
         sid = student.id
@@ -835,8 +835,9 @@ print(students)
         print(sid, &apos;\t&apos;, score)
 
 print(&apos;ID\tScore\n==================&apos;)
-normal(students, quiz)</code></pre><p>函数式编程的解法： zip, filter, reduced, map<br>    from functools import reduce</p>
-<pre><code>def cal(student):
+normal(students, quiz)</code></pre><p>函数式编程的解法： zip, filter, reduced, map</p>
+<pre><code>from functools import reduce
+def cal(student):
     filtered = filter(lambda x: x[0] == x[1][0], zip(student.ans, QUIZE))
     reduced = reduce(lambda x, y: x + y[1][1], filtered, 0)
     print(student.id, &apos;\t&apos;, reduced)
