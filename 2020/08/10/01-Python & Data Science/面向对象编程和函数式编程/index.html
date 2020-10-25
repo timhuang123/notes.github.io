@@ -9,7 +9,7 @@
 	
 	<title>
 	
-		面向对象编程，函数式编程 | 
+		01-Python &amp; Data Science/面向对象编程和函数式编程 | 
 	 
 	Coding Is Creating
 	</title>
@@ -781,7 +781,7 @@
 <div class="article-meta">
 	
 		<span>
-			阅读量:<span id="/2020/08/10/01-Python%20&amp;%20Data%20Science/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="leancloud_visitors" data-flag-title="面向对象编程，函数式编程"></span>
+			阅读量:<span id="/2020/08/10/01-Python%20&amp;%20Data%20Science/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="leancloud_visitors" data-flag-title="01-Python & Data Science/面向对象编程和函数式编程"></span>
 		</span>
 	
 	<span>Tim Huang</span>
@@ -794,7 +794,62 @@
 </div>
 
 <div id="article-content">
-	<h2 id="oop"><a href="#oop" class="headerlink" title="oop"></a>oop</h2><h2 id="functional-programming"><a href="#functional-programming" class="headerlink" title="functional programming"></a>functional programming</h2>
+	<h2 id="函数式编程（functional-programming）"><a href="#函数式编程（functional-programming）" class="headerlink" title="函数式编程（functional programming）"></a>函数式编程（functional programming）</h2><p>函数式编程与命令式编程最大的不同其实在于：函数式编程关心数据的映射，命令式编程关心解决问题的步骤。这里的映射就是数学上「函数」的概念——一种东西和另一种东西之间的对应关系。这也是为什么「函数式编程」叫做「函数」式编程。</p>
+<p>函数式编程源自于数学理论，它似乎也更适用于数学计算相关的场景，因此本文以一个简单的数据处理问题为例，逐步介绍 Python 函数式编程。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>计算 N 位同学在某份试卷的 M 道选择题上的得分（每道题目的分值不同）。</p>
+<p>首先构造试卷答案和各位同学的解答数据。</p>
+<pre><code>import random
+from collections import namedtuple
+
+Student = namedtuple(&apos;Student&apos;, [&apos;id&apos;, &apos;ans&apos;])
+
+N_Questions = 25
+N_Students = 20
+
+def gen_random_list(opts, n):
+    return [random.choice(opts) for i in range(n)]
+
+# 问题答案 &apos;ABCD&apos; 随机
+ANS   = gen_random_list(&apos;ABCD&apos;, N_Questions)
+# 题目分值 1~5 分
+SCORE = gen_random_list(range(1,6), N_Questions)
+
+quiz = zip(ANS, SCORE)
+students = [
+    # 学生答案为 &apos;ABCD*&apos; 随机，&apos;*&apos; 代表未作答
+    Student(_id, gen_random_list(&apos;ABCD*&apos;, N_Questions))
+    for _id in range(1, N_Students+1)
+]
+
+print(quiz)
+# [(&apos;A&apos;, 3), (&apos;B&apos;, 1), (&apos;D&apos;, 1), ...
+print(students)
+# [Student(id=1, ans=[&apos;C&apos;, &apos;B&apos;, &apos;A&apos;, ...</code></pre><p>首先看看面向过程的解答方法</p>
+<pre><code>def normal(students, quiz):
+    for student in students:
+        sid = student.id
+        score = 0
+        for i in range(len(quiz)):
+            if quiz[i][0] == student.ans[i]:
+                score += quiz[i][1]
+        print(sid, &apos;\t&apos;, score)
+
+print(&apos;ID\tScore\n==================&apos;)
+normal(students, quiz)</code></pre><p>函数式编程的解法： zip, filter, reduced, map<br>    from functools import reduce</p>
+<pre><code>def cal(student):
+    filtered = filter(lambda x: x[0] == x[1][0], zip(student.ans, QUIZE))
+    reduced = reduce(lambda x, y: x + y[1][1], filtered, 0)
+    print(student.id, &apos;\t&apos;, reduced)
+
+print(&apos;ID\tScore\n==================&apos;)
+list(map(cal, students))</code></pre><p>闭包解法</p>
+<pre><code>def cal(quize):
+    def inner(student):
+        filtered = filter(lambda x: x[0] == x[1][0], zip(student.ans, quize))
+        reduced = reduce(lambda x, y: x + y[1][1], filtered, 0)
+        print(student.id, &apos;\t&apos;, reduced)
+    return inner
+map(cal(QUIZE), students)</code></pre>
 </div>
 
 
