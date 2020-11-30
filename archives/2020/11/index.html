@@ -8,8 +8,6 @@
 	<!-- title -->
 	
 	<title>
-	
-		决策树 | 
 	 
 	Coding Is Creating
 	</title>
@@ -533,7 +531,7 @@
 							</ul>
 			
 							<ul>
-								<li class="file active">
+								<li class="file">
 									<a href="/2020/09/12/04-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81-ML%20from%20Scratch/4.4-GradientBoost/">
 										4.4-GradientBoost
 									</a>
@@ -783,197 +781,33 @@
 
 	<!-- 引入正文 -->
 	<div id="content">
-		<h1 id="article-title">
-
-	4.4-GradientBoost
-</h1>
-<div class="article-meta">
+		<div id="index">
 	
-		<span>
-			阅读量:<span id="/2020/09/12/04-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81-ML%20from%20Scratch/4.4-GradientBoost/" class="leancloud_visitors" data-flag-title="决策树"></span>
-		</span>
+		<div class="index-li">
+			<a href="/2020/11/30/01-Python%20&%20Data%20Science/3-%E5%A4%9A%E8%BF%9B%E7%A8%8B-multiprocess/">
+				<h2 class="index-title">
+					3-多进程-multiprocess
+				</h2>
+				<div class="index-brief">
+					多进程-multiprocessmultiprocessing包是Python中的多进程管理包。与threading.Thread类似，它可以利用multiprocessing.Process对象来创建一个进程。该进程可以运行在Python程序内部编写的函数。
+该Process对象与Thread对象
+					...
+				</div>
+			</a>
+                <div class="article-meta">
+				    <span>2020-11-30</span>
+                    
+                            
+                    
+                </div>
+		</div>	
 	
-	<span>Tim Huang</span>
-	<span>2020-09-12 18:43:29</span>
-    
-		<div id="article-categories">
-            
-		</div>
-    
+	
+	<div id="index-paginator">
+		
+	</div>
 </div>
 
-<div id="article-content">
-	<p>决策树是一种在工业界广泛应用的算法，包括广告点击率预测，信用卡账户风险分析。主要是这种算法易于实现，并且易于阐释决策结构。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>import numpy as np
-
-class Node:
-    def __init__(self, predicted_class):
-        self.predicted_class = predicted_class
-        self.feature_index = 0
-        self.threshold = 0
-        self.left = None
-        self.right = None
-
-
-class DecisionTreeClassifier:
-    def __init__(self, max_depth=None):
-        self.max_depth = max_depth #hyperparameter, depth of the decision tree
-
-    def fit(self, X, y):
-        self.n_classes_ = len(set(y))
-        self.n_features_ = X.shape[1]
-        self.tree_ = self._grow_tree(X, y)
-
-    def predict(self, X):
-        return [self._predict(inputs) for inputs in X]
-
-    def _best_split(self, X, y):
-        m = y.size #number of the data points
-        if m &lt;= 1:
-            return None, None
-        # count of each class in the current node
-        num_parent = [np.sum(y == c) for c in range(self.n_classes_)]
-        best_gini = 1.0 - sum((n / m) ** 2 for n in num_parent)
-        best_idx, best_thr = None, None
-        for idx in range(self.n_features_):
-            #sort all the values for the specified feature as threshold values
-            thresholds, classes = zip(*sorted(zip(X[:, idx], y)))
-            num_left = [0] * self.n_classes_
-            num_right = num_parent.copy()
-            for i in range(1, m): #possible split positions
-                c = classes[i - 1]
-                num_left[c] += 1
-                num_right[c] -= 1
-                gini_left = 1.0 - sum(
-                    (num_left[x] / i) ** 2 for x in range(self.n_classes_)
-                )
-                gini_right = 1.0 - sum(
-                    (num_right[x] / (m - i)) ** 2 for x in range(self.n_classes_)
-                )
-                # The Gini impurity of a split is the weighted average of the Gini impurity of the children
-                gini = (i * gini_left + (m - i) * gini_right) / m
-
-
-            # The following condition is to make sure we don&apos;t try to split two
-            # points with identical values for that feature, as it is impossible
-            # (both have to end up on the same side of a split).
-
-                if thresholds[i] == thresholds[i - 1]:
-                    continue
-                if gini &lt; best_gini:
-                    best_gini = gini
-                    best_idx = idx
-                    best_thr = (thresholds[i] + thresholds[i - 1]) / 2
-        return best_idx, best_thr
-
-    def _grow_tree(self, X, y, depth=0):
-        num_samples_per_class = [np.sum(y == i) for i in range(self.n_classes_)]
-        predicted_class = np.argmax(num_samples_per_class)
-        node = Node(predicted_class=predicted_class)
-        if depth &lt; self.max_depth:
-            idx, thr = self._best_split(X, y)
-            if idx is not None:
-                indices_left = X[:, idx] &lt; thr
-                X_left, y_left = X[indices_left], y[indices_left]
-                X_right, y_right = X[~indices_left], y[~indices_left]
-                node.feature_index = idx
-                node.threshold = thr
-                node.left = self._grow_tree(X_left, y_left, depth + 1)
-                node.right = self._grow_tree(X_right, y_right, depth + 1)
-        return node
-
-    def _predict(self, inputs):
-        node = self.tree_
-        while node.left:
-            if inputs[node.feature_index] &lt; node.threshold:
-                node = node.left
-            else:
-                node = node.right
-        return node.predicted_class</code></pre><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><pre><code>if __name__ == &quot;__main__&quot;:
-
-    from sklearn.datasets import load_iris
-    dataset = load_iris()
-    X, y = dataset.data, dataset.target
-    clf = DecisionTreeClassifier(max_depth=1)
-    clf.fit(X, y)
-    print(clf.predict([[0, 0, 5, 1.5]]))</code></pre>
-</div>
-
-
-    <div class="post-guide">
-        <div class="item left">
-            
-              <a href="/2020/09/12/04-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81-ML%20from%20Scratch/4.4-RandomForest/">
-                  <i class="fa fa-angle-left" aria-hidden="true"></i>
-                  4.4-RandomForest
-              </a>
-            
-        </div>
-        <div class="item right">
-            
-              <a href="/2020/09/12/03-Leetcode%E5%88%86%E7%B1%BB%E5%88%B7%E9%A2%98/12-BFS%20and%20DFS/place%20holder/">
-                12-BFS and DFS
-                <i class="fa fa-angle-right" aria-hidden="true"></i>
-              </a>
-            
-        </div>
-    </div>
-
-
-
-	<div id="vcomments"></div>
-
-
-<script>
-	
-		// 评论
-		new Valine({
-			av: AV,
-			el: '#vcomments',
-			notify: false,
-			verify: false,
-			path: window.location.pathname,
-			appId: '8jsytjjIGzdCFAwwgzvVXPVz-MdYXbMMI',
-			appKey: 'RAfk6QXrVENV0y2tkKfMTsT1',
-			placeholder: '请输入评论',
-			avatar: 'retro',
-			recordIP: false
-		})
-	
-	
-    // 显示次数
-		function showTime(Counter) {
-			var query = new AV.Query("Counter");
-			if($(".leancloud_visitors").length > 0){
-				var url = $(".leancloud_visitors").attr('id').trim();
-				// where field
-				query.equalTo("words", url);
-				// count
-				query.count().then(function (number) {
-					// There are number instances of MyClass where words equals url.
-					$(document.getElementById(url)).text(number?  number : '--');
-				}, function (error) {
-					// error is an instance of AVError.
-				});
-			}
-		}
-		// 追加pv
-		function addCount(Counter) {
-			var url = $(".leancloud_visitors").length > 0 ? $(".leancloud_visitors").attr('id').trim() : 'wujun234.github.io';
-			var Counter = AV.Object.extend("Counter");
-			var query = new Counter;
-			query.save({
-				words: url
-			}).then(function (object) {
-			})
-		}
-		$(function () {
-			var Counter = AV.Object.extend("Counter");
-			addCount(Counter);
-			showTime(Counter);
-		});
-	
-</script>
 	</div>
 	<div id="footer">
 	<p>

@@ -9,7 +9,7 @@
 	
 	<title>
 	
-		决策树 | 
+		01-Python &amp; Data Science/2-面向对象编程和函数式编程 | 
 	 
 	Coding Is Creating
 	</title>
@@ -116,7 +116,7 @@
 							</ul>
 			
 							<ul>
-								<li class="file">
+								<li class="file active">
 									<a href="/2020/08/10/01-Python%20&%20Data%20Science/2-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/">
 										2-面向对象编程和函数式编程
 									</a>
@@ -533,7 +533,7 @@
 							</ul>
 			
 							<ul>
-								<li class="file active">
+								<li class="file">
 									<a href="/2020/09/12/04-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81-ML%20from%20Scratch/4.4-GradientBoost/">
 										4.4-GradientBoost
 									</a>
@@ -785,16 +785,16 @@
 	<div id="content">
 		<h1 id="article-title">
 
-	4.4-GradientBoost
+	2-面向对象编程和函数式编程
 </h1>
 <div class="article-meta">
 	
 		<span>
-			阅读量:<span id="/2020/09/12/04-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81-ML%20from%20Scratch/4.4-GradientBoost/" class="leancloud_visitors" data-flag-title="决策树"></span>
+			阅读量:<span id="/2020/08/10/01-Python%20&amp;%20Data%20Science/2-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="leancloud_visitors" data-flag-title="01-Python & Data Science/2-面向对象编程和函数式编程"></span>
 		</span>
 	
 	<span>Tim Huang</span>
-	<span>2020-09-12 18:43:29</span>
+	<span>2020-08-10 14:04:17</span>
     
 		<div id="article-categories">
             
@@ -803,116 +803,79 @@
 </div>
 
 <div id="article-content">
-	<p>决策树是一种在工业界广泛应用的算法，包括广告点击率预测，信用卡账户风险分析。主要是这种算法易于实现，并且易于阐释决策结构。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>import numpy as np
+	<h2 id="函数式编程（functional-programming）"><a href="#函数式编程（functional-programming）" class="headerlink" title="函数式编程（functional programming）"></a>函数式编程（functional programming）</h2><p>函数式编程与命令式编程最大的不同其实在于：函数式编程关心数据的映射，命令式编程关心解决问题的步骤。这里的映射就是数学上「函数」的概念——一种东西和另一种东西之间的对应关系。这也是为什么「函数式编程」叫做「函数」式编程。</p>
+<p>函数式编程源自于数学理论，它似乎也更适用于数学计算相关的场景，因此本文以一个简单的数据处理问题为例，逐步介绍 Python 函数式编程。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>计算 N 位同学在某份试卷的 M 道选择题上的得分（每道题目的分值不同）。</p>
+<p>构造试卷答案和各位同学的解答数据。</p>
+<pre><code>import random
+from collections import namedtuple
 
-class Node:
-    def __init__(self, predicted_class):
-        self.predicted_class = predicted_class
-        self.feature_index = 0
-        self.threshold = 0
-        self.left = None
-        self.right = None
+Student = namedtuple(&apos;Student&apos;, [&apos;id&apos;, &apos;ans&apos;])
 
+N_Questions = 25
+N_Students = 20
 
-class DecisionTreeClassifier:
-    def __init__(self, max_depth=None):
-        self.max_depth = max_depth #hyperparameter, depth of the decision tree
+def gen_random_list(opts, n):
+    return [random.choice(opts) for i in range(n)]
 
-    def fit(self, X, y):
-        self.n_classes_ = len(set(y))
-        self.n_features_ = X.shape[1]
-        self.tree_ = self._grow_tree(X, y)
+# 问题答案 &apos;ABCD&apos; 随机
+ANS   = gen_random_list(&apos;ABCD&apos;, N_Questions)
+# 题目分值 1~5 分
+SCORE = gen_random_list(range(1,6), N_Questions)
 
-    def predict(self, X):
-        return [self._predict(inputs) for inputs in X]
+quiz = zip(ANS, SCORE)
+students = [
+    # 学生答案为 &apos;ABCD*&apos; 随机，&apos;*&apos; 代表未作答
+    Student(_id, gen_random_list(&apos;ABCD*&apos;, N_Questions))
+    for _id in range(1, N_Students+1)
+]
 
-    def _best_split(self, X, y):
-        m = y.size #number of the data points
-        if m &lt;= 1:
-            return None, None
-        # count of each class in the current node
-        num_parent = [np.sum(y == c) for c in range(self.n_classes_)]
-        best_gini = 1.0 - sum((n / m) ** 2 for n in num_parent)
-        best_idx, best_thr = None, None
-        for idx in range(self.n_features_):
-            #sort all the values for the specified feature as threshold values
-            thresholds, classes = zip(*sorted(zip(X[:, idx], y)))
-            num_left = [0] * self.n_classes_
-            num_right = num_parent.copy()
-            for i in range(1, m): #possible split positions
-                c = classes[i - 1]
-                num_left[c] += 1
-                num_right[c] -= 1
-                gini_left = 1.0 - sum(
-                    (num_left[x] / i) ** 2 for x in range(self.n_classes_)
-                )
-                gini_right = 1.0 - sum(
-                    (num_right[x] / (m - i)) ** 2 for x in range(self.n_classes_)
-                )
-                # The Gini impurity of a split is the weighted average of the Gini impurity of the children
-                gini = (i * gini_left + (m - i) * gini_right) / m
+print(quiz)
+# [(&apos;A&apos;, 3), (&apos;B&apos;, 1), (&apos;D&apos;, 1), ...
+print(students)
+# [Student(id=1, ans=[&apos;C&apos;, &apos;B&apos;, &apos;A&apos;, ...</code></pre><p>首先面向过程的解答方法</p>
+<pre><code>def normal(students, quiz):
+    for student in students:
+        sid = student.id
+        score = 0
+        for i in range(len(quiz)):
+            if quiz[i][0] == student.ans[i]:
+                score += quiz[i][1]
+        print(sid, &apos;\t&apos;, score)
 
+print(&apos;ID\tScore\n==================&apos;)
+normal(students, quiz)</code></pre><p>函数式编程的解法： zip, filter, reduced, map</p>
+<pre><code>from functools import reduce
+def cal(student):
+    filtered = filter(lambda x: x[0] == x[1][0], zip(student.ans, QUIZE))
+    reduced = reduce(lambda x, y: x + y[1][1], filtered, 0)
+    print(student.id, &apos;\t&apos;, reduced)
 
-            # The following condition is to make sure we don&apos;t try to split two
-            # points with identical values for that feature, as it is impossible
-            # (both have to end up on the same side of a split).
-
-                if thresholds[i] == thresholds[i - 1]:
-                    continue
-                if gini &lt; best_gini:
-                    best_gini = gini
-                    best_idx = idx
-                    best_thr = (thresholds[i] + thresholds[i - 1]) / 2
-        return best_idx, best_thr
-
-    def _grow_tree(self, X, y, depth=0):
-        num_samples_per_class = [np.sum(y == i) for i in range(self.n_classes_)]
-        predicted_class = np.argmax(num_samples_per_class)
-        node = Node(predicted_class=predicted_class)
-        if depth &lt; self.max_depth:
-            idx, thr = self._best_split(X, y)
-            if idx is not None:
-                indices_left = X[:, idx] &lt; thr
-                X_left, y_left = X[indices_left], y[indices_left]
-                X_right, y_right = X[~indices_left], y[~indices_left]
-                node.feature_index = idx
-                node.threshold = thr
-                node.left = self._grow_tree(X_left, y_left, depth + 1)
-                node.right = self._grow_tree(X_right, y_right, depth + 1)
-        return node
-
-    def _predict(self, inputs):
-        node = self.tree_
-        while node.left:
-            if inputs[node.feature_index] &lt; node.threshold:
-                node = node.left
-            else:
-                node = node.right
-        return node.predicted_class</code></pre><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><pre><code>if __name__ == &quot;__main__&quot;:
-
-    from sklearn.datasets import load_iris
-    dataset = load_iris()
-    X, y = dataset.data, dataset.target
-    clf = DecisionTreeClassifier(max_depth=1)
-    clf.fit(X, y)
-    print(clf.predict([[0, 0, 5, 1.5]]))</code></pre>
+print(&apos;ID\tScore\n==================&apos;)
+list(map(cal, students))</code></pre><p>闭包解法</p>
+<pre><code>def cal(quize):
+    def inner(student):
+        filtered = filter(lambda x: x[0] == x[1][0], zip(student.ans, quize))
+        reduced = reduce(lambda x, y: x + y[1][1], filtered, 0)
+        print(student.id, &apos;\t&apos;, reduced)
+    return inner
+map(cal(QUIZE), students)</code></pre>
 </div>
 
 
     <div class="post-guide">
         <div class="item left">
             
-              <a href="/2020/09/12/04-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81-ML%20from%20Scratch/4.4-RandomForest/">
+              <a href="/2020/08/14/06-%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86-NLP/2-Word2vec%E5%AE%9E%E7%8E%B0/">
                   <i class="fa fa-angle-left" aria-hidden="true"></i>
-                  4.4-RandomForest
+                  2-Word2vec实现
               </a>
             
         </div>
         <div class="item right">
             
-              <a href="/2020/09/12/03-Leetcode%E5%88%86%E7%B1%BB%E5%88%B7%E9%A2%98/12-BFS%20and%20DFS/place%20holder/">
-                12-BFS and DFS
+              <a href="/2020/08/09/02-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95-Data%20structure%20and%20Algorithms/4-%E9%98%9F%E5%88%97-Queue/">
+                4-队列-Queue
                 <i class="fa fa-angle-right" aria-hidden="true"></i>
               </a>
             
