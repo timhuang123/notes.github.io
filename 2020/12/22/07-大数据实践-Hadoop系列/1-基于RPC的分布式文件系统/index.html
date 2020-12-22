@@ -881,36 +881,7 @@
 </div>
 
 <div id="article-content">
-	<h2 id="多进程-multiprocess"><a href="#多进程-multiprocess" class="headerlink" title="多进程-multiprocess"></a>多进程-multiprocess</h2><p>MapReduce 是一种用于大规模数据集的并行运算编程模型，分为 Map（映射）和 Reduce（归约）两个步骤。Py3 把 reduce() 藏到了标准模块 functools 中，只保留了 map() 在标准函数库内。借助于 Python 的标准进程模块，以及map() 和 reduce() 函数，我们可以非常容易地搭建一个 MapReduce 框架。</p>
-<p>下面，我们以计算整数列表各元素的平方和为例，演示 MapReduce 并行运算编程模型。</p>
-<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><pre><code>from functools import reduce
-import multiprocessing as mp
-
-def power(x): # 返回x的平方
-    return pow(x, 2)
-
-def adder(a, b): # 求和
-    return a + b
-
-def map_reduce(dataset, processes=4): # 默认进程池最多4个进程
-    with mp.Pool(processes=processes) as mpp: # 创建进程池mpp
-        d = mpp.map(power, dataset) # 使用进程池Pool的映射方法，计算整数列表各元素的平方，返回列表
-        result = reduce(adder, d, 0) # 规约计算结果
-        return result # 返回计算结果
-
-if __name__ == &apos;__main__&apos;:
-    dataset = range(10000) # 生成[0,10000)区间的整数列表（实际是生成器）作为数据集
-    print(map_reduce(dataset))</code></pre><h2 id="更函数式的写法，使用lambda"><a href="#更函数式的写法，使用lambda" class="headerlink" title="更函数式的写法，使用lambda"></a>更函数式的写法，使用lambda</h2><p>一个听起来非常繁琐的概念，我们只用了十几行代码就讲清楚了。事实上，如果将求和改用lambda 函数，这个代码还可以写得更简洁。需要说明一点：不能在进程池的 map() 方法中使用lambda 函数，因为在 Pool 实例化之前就应定义好这个函数——这就是所谓的可序列化（pickle）。</p>
-<pre><code>from functools import reduce
-import multiprocessing as mp
-
-def power(x):
-    return pow(x, 2)
-
-if __name__ == &apos;__main__&apos;:
-    with mp.Pool(processes=4) as mpp:
-        print(reduce(lambda a,b:a+b, mpp.map(power, range(10000)), 0))</code></pre><p>最终，我们仅用7行Python代码，就完美地演绎了MapReduce并行运算编程模型。</p>
-
+	<h2 id="分布式文件系统"><a href="#分布式文件系统" class="headerlink" title="分布式文件系统"></a>分布式文件系统</h2>
 </div>
 
 
