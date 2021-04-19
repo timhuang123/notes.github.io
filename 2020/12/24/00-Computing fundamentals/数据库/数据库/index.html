@@ -992,9 +992,60 @@
 </div>
 
 <div id="article-content">
-	<p>##　编译器原理</p>
-<p>编译器是将一种程序（源程序）翻译成另一种程序（目标程序）的计算机程序。本书介绍一个非常简单的编译器（ TinyC 编译器）的实现。</p>
+	<p>##　Python 实现数据库</p>
+<p>os模块帮助实现了文件系统，json实现io，因此没有后端引擎; 没有实现sql语句解析。</p>
+<pre><code>import json
+import os
 
+
+class FoobarDB(object):
+    def __init__(self , location):
+        self.location = os.path.expanduser(location)
+        self.load(self.location)
+
+    def load(self , location):
+        if os.path.exists(location):
+            self._load()
+        else:
+                self.db = {}
+        return True
+
+    def _load(self):
+        self.db = json.load(open(self.location , &quot;r&quot;))
+
+    def dumpdb(self):
+        try:
+            json.dump(self.db , open(self.location, &quot;w+&quot;))
+            return True
+        except:
+            return False
+
+    def set(self , key , value):
+        try:
+            self.db[str(key)] = value
+            self.dumpdb()
+        except Exception as e:
+            print(&quot;[X] Error Saving Values to Database : &quot; + str(e))
+            return False
+
+    def get(self , key):
+        try:
+            return self.db[key]
+        except KeyError:
+            print(&quot;No Value Can Be Found for &quot; + str(key))
+            return False
+
+    def delete(self , key):
+        if not key in self.db:
+            return False
+        del self.db[key]
+        self.dumpdb()
+        return True
+
+    def resetdb(self):
+        self.db={}
+        self.dumpdb()
+        return True</code></pre>
 </div>
 
 
