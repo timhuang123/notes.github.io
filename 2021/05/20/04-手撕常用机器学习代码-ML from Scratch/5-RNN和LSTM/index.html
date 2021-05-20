@@ -9,7 +9,7 @@
 	
 	<title>
 	
-		04-手撕常用机器学习代码-ML from Scratch/其它-机器学习中的variance和bias | 
+		04-手撕常用机器学习代码-ML from Scratch/5-RNN和LSTM | 
 	 
 	Coding Is Creating
 	</title>
@@ -731,7 +731,7 @@
 							</ul>
 			
 							<ul>
-								<li class="file">
+								<li class="file active">
 									<a href="/2021/05/20/04-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81-ML%20from%20Scratch/5-RNN%E5%92%8CLSTM/">
 										5-RNN和LSTM
 									</a>
@@ -749,7 +749,7 @@
 							</ul>
 			
 							<ul>
-								<li class="file active">
+								<li class="file">
 									<a href="/2020/09/01/04-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81-ML%20from%20Scratch/%E5%85%B6%E5%AE%83-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84variance%E5%92%8Cbias/">
 										其它-机器学习中的variance和bias
 									</a>
@@ -1010,16 +1010,16 @@
 	<div id="content">
 		<h1 id="article-title">
 
-	其它-机器学习中的variance和bias
+	5-RNN和LSTM
 </h1>
 <div class="article-meta">
 	
 		<span>
-			阅读量:<span id="/2020/09/01/04-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81-ML%20from%20Scratch/%E5%85%B6%E5%AE%83-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84variance%E5%92%8Cbias/" class="leancloud_visitors" data-flag-title="04-手撕常用机器学习代码-ML from Scratch/其它-机器学习中的variance和bias"></span>
+			阅读量:<span id="/2021/05/20/04-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81-ML%20from%20Scratch/5-RNN%E5%92%8CLSTM/" class="leancloud_visitors" data-flag-title="04-手撕常用机器学习代码-ML from Scratch/5-RNN和LSTM"></span>
 		</span>
 	
 	<span>Tim Huang</span>
-	<span>2020-09-01 23:28:48</span>
+	<span>2021-05-20 13:25:19</span>
     
 		<div id="article-categories">
             
@@ -1028,23 +1028,33 @@
 </div>
 
 <div id="article-content">
-	<h2 id="什么是机器学习的-variance-and-bias-trade-off"><a href="#什么是机器学习的-variance-and-bias-trade-off" class="headerlink" title="什么是机器学习的 variance and bias trade-off?"></a>什么是机器学习的 variance and bias trade-off?</h2>
+	<h1 id="第一部分-RNN实现"><a href="#第一部分-RNN实现" class="headerlink" title="第一部分 RNN实现"></a>第一部分 RNN实现</h1><p>一个 rnn cell 前向传播</p>
+<pre><code>def rnn_cell_forward(xt, a_prev, parameters):
+    Wax = parameters[&quot;Wax&quot;]
+    Waa = parameters[&quot;Waa&quot;]
+    Wya = parameters[&quot;Wya&quot;]
+    ba = parameters[&quot;ba&quot;]
+    by = parameters[&quot;by&quot;]
+
+    a_next = np.tanh(np.dot(Wax, xt) + np.dot(Waa, a_prev) + ba);
+    yt_pred = softmax(np.dot(Wya, a_next) + by);   
+
+    cache = (a_next, a_prev, xt, parameters)
+
+    return a_next, yt_pred, cache</code></pre><h1 id="第二部分-LSTM学习长期状态和短期状态"><a href="#第二部分-LSTM学习长期状态和短期状态" class="headerlink" title="第二部分 LSTM学习长期状态和短期状态"></a>第二部分 LSTM学习长期状态和短期状态</h1><p>思想：普通RNN的隐层只有一个状态，如h，该状态对短期的输入十分敏感，这使得RNN处理短期依赖问题很拿手，那么如果我们再添加一个状态，如c，让它来保存长期的状态，这样，我们不就能保证对长期的输入保持一定的敏感，问题不就解决了。</p>
+<p>参考<br><a href="https://zhuanlan.zhihu.com/p/44124492" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/44124492</a></p>
+
 </div>
 
 
     <div class="post-guide">
         <div class="item left">
             
-              <a href="/2020/09/08/01-Python%20&%20Data%20Science/0-%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E5%AF%BC%E8%AE%BA/">
-                  <i class="fa fa-angle-left" aria-hidden="true"></i>
-                  0-计算机基础知识导论
-              </a>
-            
         </div>
         <div class="item right">
             
-              <a href="/2020/08/31/10-%E7%BB%8F%E5%85%B8%E4%B9%A6%E7%B1%8DPDF%E7%89%88%E6%9C%AC/%E4%B9%A6%E7%B1%8D%E6%8E%A8%E8%8D%90/">
-                书籍推荐
+              <a href="/2021/05/20/04-%E6%89%8B%E6%92%95%E5%B8%B8%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%BB%A3%E7%A0%81-ML%20from%20Scratch/6-CNN%E5%AE%9E%E7%8E%B0/">
+                6-CNN实现
                 <i class="fa fa-angle-right" aria-hidden="true"></i>
               </a>
             
