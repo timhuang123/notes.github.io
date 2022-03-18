@@ -1078,18 +1078,18 @@
 
 <div id="article-content">
 	<h1 id="刷二叉树"><a href="#刷二叉树" class="headerlink" title="刷二叉树"></a>刷二叉树</h1><h2 id="导言"><a href="#导言" class="headerlink" title="导言"></a>导言</h2><h2 id="第一部分"><a href="#第一部分" class="headerlink" title="第一部分"></a>第一部分</h2><ol>
-<li><p>翻转二叉树 （题号226）</p>
-<p> class Solution(object):</p>
-<pre><code>def invertTree(self,root):
-    if not root: return 
-    root.left, root.right=root.right, root.left
-
-    invertTree(root.left)
-    invertTree(root.right)
-
-    return root</code></pre></li>
+<li>翻转二叉树 （题号226）</li>
 </ol>
-<ol start="2">
+<p>代码</p>
+<pre><code>class Solution(object):
+    def invertTree(self,root):
+        if not root: return 
+        root.left, root.right=root.right, root.left
+
+        invertTree(root.left)
+        invertTree(root.right)
+
+        return root</code></pre><ol start="2">
 <li>填充二叉树节点的右侧指针 (题号116)</li>
 </ol>
 <p>代码</p>
@@ -1120,8 +1120,11 @@ class Solution(object):
         if not root: return root
         connectTwoNode(root.left,root.right)
         return root</code></pre><ol start="3">
-<li><p>将二叉树展开为链表 （题号114）</p>
-<h1 id="Definition-for-a-binary-tree-node"><a href="#Definition-for-a-binary-tree-node" class="headerlink" title="Definition for a binary tree node."></a>Definition for a binary tree node.</h1><h1 id="class-TreeNode-object"><a href="#class-TreeNode-object" class="headerlink" title="class TreeNode(object):"></a>class TreeNode(object):</h1><h1 id="def-init-self-val-0-left-None-right-None"><a href="#def-init-self-val-0-left-None-right-None" class="headerlink" title="def init(self, val=0, left=None, right=None):"></a>def <strong>init</strong>(self, val=0, left=None, right=None):</h1><h1 id="self-val-val"><a href="#self-val-val" class="headerlink" title="self.val = val"></a>self.val = val</h1><h1 id="self-left-left"><a href="#self-left-left" class="headerlink" title="self.left = left"></a>self.left = left</h1><h1 id="self-right-right"><a href="#self-right-right" class="headerlink" title="self.right = right"></a>self.right = right</h1><p> class Solution(object):</p>
+<li><p>将二叉树展开为链表 （题号114）<br> ‘’’<br>  Definition for a binary tree node.<br>  class TreeNode(object):</p>
+<pre><code>def __init__(self, val=0, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right</code></pre><p> ‘’’<br> class Solution(object):</p>
 <pre><code>def flatten(self, root):
     &quot;&quot;&quot;
     :type root: TreeNode
