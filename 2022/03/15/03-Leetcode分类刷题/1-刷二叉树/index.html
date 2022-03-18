@@ -1173,35 +1173,40 @@ class Solution(object):
         if not root: return root
         connectTwoNode(root.left,root.right)
         return root</code></pre><ol start="3">
-<li><p>将二叉树展开为链表 （题号114）<br> “””<br>  Definition for a binary tree node.<br>  class TreeNode(object):</p>
-<pre><code>def __init__(self, val=0, left=None, right=None):
-    self.val = val
-    self.left = left
-    self.right = right</code></pre><p> “””<br> class Solution(object):</p>
-<pre><code>def flatten(self, root):
-    &quot;&quot;&quot;
-    :type root: TreeNode
-    :rtype: None Do not return anything, modify root in-place instead.
-    &quot;&quot;&quot;
-
-    if not root: return
-    self.flatten(root.left)
-    self.flatten(root.right)
-
-    left=root.left
-    right=root.right
-    root.left=None
-    root.right=left # root right node points to left part
-
-    p=root
-    while p.right:
-        p=p.right
-
-    p.right=right # new right part connect with original right part 
-
-    # modify in place, do not return anything</code></pre></li>
+<li>将二叉树展开为链表 （题号114）</li>
 </ol>
+<p>代码</p>
+<pre><code>&quot;&quot;&quot;
+ Definition for a binary tree node.
+ class TreeNode(object):
+     def __init__(self, val=0, left=None, right=None):
+         self.val = val
+         self.left = left
+         self.right = right
+&quot;&quot;&quot;
+class Solution(object):
+    def flatten(self, root):
+        &quot;&quot;&quot;
+        :type root: TreeNode
+        :rtype: None Do not return anything, modify root in-place instead.
+        &quot;&quot;&quot;
 
+        if not root: return
+        self.flatten(root.left)
+        self.flatten(root.right)
+
+        left=root.left
+        right=root.right
+        root.left=None
+        root.right=left # root right node points to left part
+
+        p=root
+        while p.right:
+            p=p.right
+
+        p.right=right # new right part connect with original right part 
+
+        # modify in place, do not return anything</code></pre>
 </div>
 
 
