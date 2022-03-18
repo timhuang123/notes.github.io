@@ -1087,8 +1087,8 @@
     # do sth here, means inorder
     traverse(root.right)
 
-    # do sth here, means postorder</code></pre><p>注意： （1）前中后序是遍历二叉树过程中处理每一个节点的三个特殊时间点</p>
-<pre><code>（2） 遍历有迭代遍历，也有递归遍历</code></pre><h2 id="两种二叉树的递归解法的思路"><a href="#两种二叉树的递归解法的思路" class="headerlink" title="两种二叉树的递归解法的思路"></a>两种二叉树的递归解法的思路</h2><p>（1） 遍历一遍二叉树，对应回溯算法框架</p>
+    # do sth here, means postorder</code></pre><p>注意： （1）前中后序是遍历二叉树过程中处理每一个节点的三个特殊时间点， （2） 遍历有迭代遍历，也有递归遍历</p>
+<h2 id="两种二叉树的递归解法的思路"><a href="#两种二叉树的递归解法的思路" class="headerlink" title="两种二叉树的递归解法的思路"></a>两种二叉树的递归解法的思路</h2><p>（1） 遍历一遍二叉树，对应回溯算法框架</p>
 <p>（2） 分解问题，对应动态规划框架</p>
 <ol>
 <li>二叉树最大深度，题目 104</li>
@@ -1113,8 +1113,21 @@
             self.depth-=1 # postorder position
         traverse(root)
         return self.res</code></pre><p>（2）分解问题的思路</p>
-<p>class Solution(object):<br>    def <strong>init</strong>(self):<br>        self.res=0<br>        self.depth=0<br>    def maxDepth(self, root):<br>        “””<br>        :type root: TreeNode<br>        :rtype: int<br>        “””<br>        if not root: return 0<br>        leftMax=self.maxDepth(root.left)<br>        rightMax=self.maxDepth(root.right)<br>        res=max(leftMax,rightMax)+1</p>
-<pre><code>return res</code></pre><h2 id="基本的二叉树前中后序遍历，也可以用如上两种思路"><a href="#基本的二叉树前中后序遍历，也可以用如上两种思路" class="headerlink" title="基本的二叉树前中后序遍历，也可以用如上两种思路"></a>基本的二叉树前中后序遍历，也可以用如上两种思路</h2><p>综上，遇到一道二叉树的题目时的通用思考过程是：</p>
+<pre><code>class Solution(object):
+    def __init__(self):
+        self.res=0
+        self.depth=0
+    def maxDepth(self, root):
+        &quot;&quot;&quot;
+        :type root: TreeNode
+        :rtype: int
+        &quot;&quot;&quot;
+        if not root: return 0
+        leftMax=self.maxDepth(root.left)
+        rightMax=self.maxDepth(root.right)
+        res=max(leftMax,rightMax)+1
+
+        return res</code></pre><h2 id="基本的二叉树前中后序遍历，也可以用如上两种思路"><a href="#基本的二叉树前中后序遍历，也可以用如上两种思路" class="headerlink" title="基本的二叉树前中后序遍历，也可以用如上两种思路"></a>基本的二叉树前中后序遍历，也可以用如上两种思路</h2><p>综上，遇到一道二叉树的题目时的通用思考过程是：</p>
 <p>是否可以通过遍历一遍二叉树得到答案？如果不能的话，是否可以定义一个递归函数，通过子问题（子树）的答案推导出原问题的答案？</p>
 <h2 id="后序位置的特殊之处"><a href="#后序位置的特殊之处" class="headerlink" title="后序位置的特殊之处"></a>后序位置的特殊之处</h2><h2 id="层序遍历"><a href="#层序遍历" class="headerlink" title="层序遍历"></a>层序遍历</h2><p>层序遍历属于迭代遍历</p>
 <h1 id="第一部分"><a href="#第一部分" class="headerlink" title="第一部分"></a>第一部分</h1><ol>
@@ -1160,11 +1173,11 @@ class Solution(object):
         if not root: return root
         connectTwoNode(root.left,root.right)
         return root</code></pre><ol start="3">
-<li><p>将二叉树展开为链表 （题号114）<br> ‘’’<br>  Definition for a binary tree node.<br>  class TreeNode(object):</p>
+<li><p>将二叉树展开为链表 （题号114）<br> “””<br>  Definition for a binary tree node.<br>  class TreeNode(object):</p>
 <pre><code>def __init__(self, val=0, left=None, right=None):
     self.val = val
     self.left = left
-    self.right = right</code></pre><p> ‘’’<br> class Solution(object):</p>
+    self.right = right</code></pre><p> “””<br> class Solution(object):</p>
 <pre><code>def flatten(self, root):
     &quot;&quot;&quot;
     :type root: TreeNode
