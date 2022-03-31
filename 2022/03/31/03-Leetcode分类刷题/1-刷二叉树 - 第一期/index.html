@@ -9,7 +9,7 @@
 	
 	<title>
 	
-		00-Computing fundamentals/数据库/数据库 | 
+		03-Leetcode分类刷题/1-刷二叉树 - 第一期 | 
 	 
 	Coding Is Creating
 	</title>
@@ -125,7 +125,7 @@
 									</a>
 									
 							<ul>
-								<li class="file active">
+								<li class="file">
 									<a href="/2020/12/24/00-Computing%20fundamentals/%E6%95%B0%E6%8D%AE%E5%BA%93/%E6%95%B0%E6%8D%AE%E5%BA%93/">
 										数据库
 									</a>
@@ -368,7 +368,7 @@
 							</ul>
 			
 							<ul>
-								<li class="file">
+								<li class="file active">
 									<a href="/2022/03/31/03-Leetcode%E5%88%86%E7%B1%BB%E5%88%B7%E9%A2%98/1-%E5%88%B7%E4%BA%8C%E5%8F%89%E6%A0%91%20-%20%E7%AC%AC%E4%B8%80%E6%9C%9F/">
 										1-刷二叉树 - 第一期
 									</a>
@@ -1086,16 +1086,16 @@
 	<div id="content">
 		<h1 id="article-title">
 
-	数据库
+	1-刷二叉树 - 第一期
 </h1>
 <div class="article-meta">
 	
 		<span>
-			阅读量:<span id="/2020/12/24/00-Computing%20fundamentals/%E6%95%B0%E6%8D%AE%E5%BA%93/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="leancloud_visitors" data-flag-title="00-Computing fundamentals/数据库/数据库"></span>
+			阅读量:<span id="/2022/03/31/03-Leetcode%E5%88%86%E7%B1%BB%E5%88%B7%E9%A2%98/1-%E5%88%B7%E4%BA%8C%E5%8F%89%E6%A0%91%20-%20%E7%AC%AC%E4%B8%80%E6%9C%9F/" class="leancloud_visitors" data-flag-title="03-Leetcode分类刷题/1-刷二叉树 - 第一期"></span>
 		</span>
 	
 	<span>Tim Huang</span>
-	<span>2020-12-24 01:42:02</span>
+	<span>2022-03-31 17:37:35</span>
     
 		<div id="article-categories">
             
@@ -1104,76 +1104,100 @@
 </div>
 
 <div id="article-content">
-	<p>##　Python 实现数据库</p>
-<p>os模块帮助实现了文件系统，json实现io，因此没有后端引擎; 没有实现sql语句解析。</p>
-<pre><code>import json
-import os
+	<h1 id="第一部分：-每道题分别用两种思维解决"><a href="#第一部分：-每道题分别用两种思维解决" class="headerlink" title="第一部分： 每道题分别用两种思维解决"></a>第一部分： 每道题分别用两种思维解决</h1><ol>
+<li>翻转二叉树 （题号226）</li>
+</ol>
+<p>代码，遍历思维</p>
+<pre><code>class Solution(object):
+    def invertTree(self,root):
+        if not root: return 
+        root.left, root.right=root.right, root.left
 
+        invertTree(root.left)
+        invertTree(root.right)
 
-class FoobarDB(object):
-    def __init__(self , location):
-        self.location = os.path.expanduser(location)
-        self.load(self.location)
+        return root</code></pre><p>分解问题思维呢？</p>
+<ol start="2">
+<li>填充二叉树节点的右侧指针 (题号116)</li>
+</ol>
+<p>代码</p>
+<pre><code>&quot;&quot;&quot;
+# Definition for a Node.
+class Node(object):
+    def __init__(self, val=0, left=None, right=None, next=None):
+        self.val = val
+        self.left = left
+        self.right = right
+        self.next = next
+&quot;&quot;&quot;
 
-    def load(self , location):
-        if os.path.exists(location):
-            self._load()
-        else:
-                self.db = {}
-        return True
+class Solution(object):
+    def connect(self, root):
+        &quot;&quot;&quot;
+        :type root: Node
+        :rtype: Node
+        &quot;&quot;&quot;
+        def connectTwoNode(node1,node2):
+            if not node1 or not node1: return 
+            node1.next=node2
+            connectTwoNode(node1.left,node1.right)
+            connectTwoNode(node2.left,node2.right)
+            ##
+            connectTwoNode(node1.right,node2.left)
 
-    def _load(self):
-        self.db = json.load(open(self.location , &quot;r&quot;))
+        if not root: return root
+        connectTwoNode(root.left,root.right)
+        return root</code></pre><ol start="3">
+<li>将二叉树展开为链表 （题号114）</li>
+</ol>
+<p>代码</p>
+<pre><code>&quot;&quot;&quot;
+ Definition for a binary tree node.
+ class TreeNode(object):
+     def __init__(self, val=0, left=None, right=None):
+         self.val = val
+         self.left = left
+         self.right = right
+&quot;&quot;&quot;
+class Solution(object):
+    def flatten(self, root):
+        &quot;&quot;&quot;
+        :type root: TreeNode
+        :rtype: None Do not return anything, modify root in-place instead.
+        &quot;&quot;&quot;
 
-    def dumpdb(self):
-        try:
-            json.dump(self.db , open(self.location, &quot;w+&quot;))
-            return True
-        except:
-            return False
+        if not root: return
+        self.flatten(root.left)
+        self.flatten(root.right)
 
-    def set(self , key , value):
-        try:
-            self.db[str(key)] = value
-            self.dumpdb()
-        except Exception as e:
-            print(&quot;[X] Error Saving Values to Database : &quot; + str(e))
-            return False
+        left=root.left
+        right=root.right
+        root.left=None
+        root.right=left # root right node points to left part
 
-    def get(self , key):
-        try:
-            return self.db[key]
-        except KeyError:
-            print(&quot;No Value Can Be Found for &quot; + str(key))
-            return False
+        p=root
+        while p.right:
+            p=p.right
 
-    def delete(self , key):
-        if not key in self.db:
-            return False
-        del self.db[key]
-        self.dumpdb()
-        return True
+        p.right=right # new right part connect with original right part 
 
-    def resetdb(self):
-        self.db={}
-        self.dumpdb()
-        return True</code></pre>
+        # modify in place, do not return anything</code></pre>
 </div>
 
 
     <div class="post-guide">
         <div class="item left">
             
-              <a href="/2020/12/24/00-Computing%20fundamentals/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+              <a href="/2022/03/31/03-Leetcode%E5%88%86%E7%B1%BB%E5%88%B7%E9%A2%98/1-%E5%88%B7%E4%BA%8C%E5%8F%89%E6%A0%91%20-%20%E7%AC%AC%E4%B8%89%E6%9C%9F/">
                   <i class="fa fa-angle-left" aria-hidden="true"></i>
-                  操作系统
+                  1-刷二叉树 - 第三期
               </a>
             
         </div>
         <div class="item right">
             
-              <a href="/2020/12/24/00-Computing%20fundamentals/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
-                计算机组成
+              <a href="/2022/03/15/03-Leetcode%E5%88%86%E7%B1%BB%E5%88%B7%E9%A2%98/1-%E5%88%B7%E4%BA%8C%E5%8F%89%E6%A0%91-%E7%BA%B2%E9%A2%86/">
+                1-刷二叉树-纲领
                 <i class="fa fa-angle-right" aria-hidden="true"></i>
               </a>
             
